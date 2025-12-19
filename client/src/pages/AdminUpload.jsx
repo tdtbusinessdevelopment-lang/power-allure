@@ -5,6 +5,7 @@ const AdminUpload = () => {
   const themeColor = "#d6b48e";
   const [mainImage, setMainImage] = useState(null);
   const [galleryFiles, setGalleryFiles] = useState([]);
+  const [collection, setCollection] = useState("local"); // 'local' or 'foreign'
   const [formData, setFormData] = useState({
     name: "",
     age: "",
@@ -13,20 +14,18 @@ const AdminUpload = () => {
     weight: "",
   });
   const [loading, setLoading] = useState(false);
+  const [showManageModal, setShowManageModal] = useState(false);
+  const [models, setModels] = useState([]);
+  const [loadingModels, setLoadingModels] = useState(false);
 
-  // Cloudinary Config - Replace these!
-  const CLOUD_NAME = "YOUR_CLOUD_NAME";
-  const UPLOAD_PRESET = "YOUR_UPLOAD_PRESET";
-
-  const uploadToCloudinary = async (file) => {
-    const data = new FormData();
-    data.append("file", file);
-    data.append("upload_preset", UPLOAD_PRESET);
-    const res = await axios.post(
-      `api.cloudinary.com{CLOUD_NAME}/image/upload`,
-      data
-    );
-    return res.data.secure_url;
+  // Convert file to base64
+  const fileToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
   };
 
   const handleUpload = async (e) => {
@@ -35,30 +34,38 @@ const AdminUpload = () => {
     setLoading(true);
 
     try {
-      // 1. Upload Main Image
-      const mainImageUrl = await uploadToCloudinary(mainImage);
+      // 1. Convert Main Image to base64
+      const mainImageBase64 = await fileToBase64(mainImage);
 
-      // 2. Upload Gallery Images (Multiple)
-      const galleryUrls = [];
+      // 2. Convert Gallery Images to base64
+      const galleryBase64 = [];
       if (galleryFiles.length > 0) {
-        // Upload all gallery images simultaneously
-        const uploadPromises = Array.from(galleryFiles).map((file) =>
-          uploadToCloudinary(file)
+        const convertPromises = Array.from(galleryFiles).map((file) =>
+          fileToBase64(file)
         );
-        const results = await Promise.all(uploadPromises);
-        galleryUrls.push(...results);
+        const results = await Promise.all(convertPromises);
+        galleryBase64.push(...results);
       }
 
-      // 3. Save to MongoDB (Matches your Mongoose Schema)
+      // 3. Save to MongoDB with appropriate endpoint
       const finalData = {
         ...formData,
-        imageUrl: mainImageUrl, // Required string
-        galleryImages: galleryUrls, // Array of strings
+        imageUrl: mainImageBase64,
+        galleryImages: galleryBase64,
       };
 
-      await axios.post("http://localhost:5000/api/models", finalData);
+      const endpoint =
+        collection === "local"
+          ? "http://localhost:5000/models/local"
+          : "http://localhost:5000/models/foreign";
 
-      alert("Model and Gallery saved successfully!");
+      await axios.post(endpoint, finalData);
+
+      alert(
+        `${
+          collection === "local" ? "Local" : "Foreign"
+        } talent saved successfully!`
+      );
       setFormData({
         name: "",
         age: "",
@@ -76,6 +83,44 @@ const AdminUpload = () => {
     }
   };
 
+  const fetchModels = async () => {
+    setLoadingModels(true);
+    try {
+      const endpoint =
+        collection === "local"
+          ? "http://localhost:5000/models/local"
+          : "http://localhost:5000/models/foreign";
+      const response = await axios.get(endpoint);
+      setModels(response.data);
+    } catch (error) {
+      console.error("Failed to fetch models:", error);
+      alert("Failed to load models");
+    } finally {
+      setLoadingModels(false);
+    }
+  };
+
+  const handleDelete = async (modelId, modelName) => {
+    if (!confirm(`Are you sure you want to delete "${modelName}"?`)) {
+      return;
+    }
+
+    try {
+      await axios.delete(`http://localhost:5000/models/${modelId}`);
+      alert("Model deleted successfully!");
+      // Refresh the list
+      fetchModels();
+    } catch (error) {
+      console.error("Delete failed:", error);
+      alert("Failed to delete model");
+    }
+  };
+
+  const openManageModal = () => {
+    setShowManageModal(true);
+    fetchModels();
+  };
+
   return (
     <div className="min-h-screen bg-black flex items-center justify-center p-6">
       <form
@@ -89,6 +134,54 @@ const AdminUpload = () => {
         >
           Add Talent & Gallery
         </h2>
+
+        {/* Manage Models Button */}
+        <button
+          type="button"
+          onClick={openManageModal}
+          className="w-full mb-6 py-2 rounded-full border text-white font-semibold transition-all hover:text-black"
+          style={{ borderColor: themeColor }}
+          onMouseEnter={(e) => {
+            e.target.style.backgroundColor = themeColor;
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.backgroundColor = "transparent";
+          }}
+        >
+          📋 Manage Models
+        </button>
+
+        {/* Collection Selection */}
+        <div className="flex gap-3 mb-6">
+          <button
+            type="button"
+            onClick={() => setCollection("local")}
+            className={`flex-1 py-2 rounded-full font-semibold transition-all ${
+              collection === "local" ? "text-black" : "text-white border"
+            }`}
+            style={{
+              backgroundColor:
+                collection === "local" ? themeColor : "transparent",
+              borderColor: collection === "local" ? themeColor : themeColor,
+            }}
+          >
+            Local
+          </button>
+          <button
+            type="button"
+            onClick={() => setCollection("foreign")}
+            className={`flex-1 py-2 rounded-full font-semibold transition-all ${
+              collection === "foreign" ? "text-black" : "text-white border"
+            }`}
+            style={{
+              backgroundColor:
+                collection === "foreign" ? themeColor : "transparent",
+              borderColor: collection === "foreign" ? themeColor : themeColor,
+            }}
+          >
+            Foreign
+          </button>
+        </div>
 
         <div className="mb-4">
           <label className="text-white text-sm block mb-1">
@@ -129,7 +222,6 @@ const AdminUpload = () => {
           <input
             type="number"
             placeholder="Age"
-            required
             className="w-1/3 bg-transparent border-b mb-4 p-2 text-white outline-none"
             style={{ borderColor: themeColor }}
             onChange={(e) => setFormData({ ...formData, age: e.target.value })}
@@ -178,6 +270,64 @@ const AdminUpload = () => {
             : "Save to Power Allure"}
         </button>
       </form>
+
+      {/* Manage Models Modal */}
+      {showManageModal && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-6"
+          onClick={() => setShowManageModal(false)}
+        >
+          <div
+            className="bg-black border rounded-3xl p-8 max-w-2xl w-full max-h-[80vh] overflow-y-auto"
+            style={{ borderColor: themeColor }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-2xl font-bold" style={{ color: themeColor }}>
+                Manage {collection === "local" ? "Local" : "Foreign"} Models
+              </h3>
+              <button
+                onClick={() => setShowManageModal(false)}
+                className="text-white hover:text-red-500 text-3xl font-bold transition-colors"
+              >
+                ×
+              </button>
+            </div>
+
+            {loadingModels ? (
+              <p className="text-white text-center py-8">Loading models...</p>
+            ) : models.length === 0 ? (
+              <p className="text-gray-400 text-center py-8">
+                No models found in this collection
+              </p>
+            ) : (
+              <div className="space-y-3">
+                {models.map((model) => (
+                  <div
+                    key={model._id}
+                    className="flex items-center justify-between p-4 rounded-xl border transition-all hover:bg-opacity-10 hover:bg-white"
+                    style={{ borderColor: themeColor }}
+                  >
+                    <div>
+                      <p className="text-white font-semibold text-lg">
+                        {model.name}
+                      </p>
+                      <p className="text-gray-400 text-sm">ID: {model._id}</p>
+                    </div>
+                    <button
+                      onClick={() => handleDelete(model._id, model.name)}
+                      className="px-4 py-2 rounded-full border text-white font-semibold transition-all hover:bg-red-600 hover:border-red-600"
+                      style={{ borderColor: themeColor }}
+                    >
+                      🗑️ Delete
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

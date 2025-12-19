@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const foreignModelSchema = new mongoose.Schema({
   name: { type: String, required: true },
-  age: { type: Number, required: true },
+  age: { type: Number },
   description: { type: String },
   height: { type: String },
   weight: { type: String },

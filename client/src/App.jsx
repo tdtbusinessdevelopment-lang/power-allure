@@ -21,6 +21,8 @@ function App() {
       <Route path="/about" element={<AboutPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
+      
+        <Route path="/admin/upload" element={<AdminUpload />} />
 
       <Route element={<ProtectedRoute />}>
         <Route path="/main" element={<MainPage />} />
@@ -29,7 +31,6 @@ function App() {
         <Route path="/favorites" element={<FavoritesPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/edit" element={<EditPage />} />
-        <Route path="/admin/upload" element={<AdminUpload />} />
       </Route>
 
       {/* Catch-all route for 404 errors - must be last */}

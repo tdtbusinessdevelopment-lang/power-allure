@@ -4,7 +4,8 @@ import {
   getForeignModels,
   getModelById,
   createLocalModel,
-  createForeignModel
+  createForeignModel,
+  deleteModel
 } from "../controllers/modelController.js";
 
 const router = Router();
@@ -17,5 +18,8 @@ router.get("/:id", getModelById);
 // POST routes
 router.post("/local", createLocalModel);
 router.post("/foreign", createForeignModel);
+
+// DELETE route
+router.delete("/:id", deleteModel);
 
 export default router;
