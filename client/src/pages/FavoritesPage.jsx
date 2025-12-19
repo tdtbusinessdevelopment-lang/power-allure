@@ -1,0 +1,66 @@
+import React, { useState, useEffect } from "react";
+import Header from "../components/Header";
+import LoadingSpinner from "../components/LoadingSpinner";
+import { Link } from "react-router-dom";
+
+const FavoritesPage = () => {
+  const [favorites, setFavorites] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchFavorites = async () => {
+      const user = JSON.parse(localStorage.getItem("user"));
+      if (user && user._id) {
+        try {
+          const response = await fetch(
+            `http://localhost:5000/api/users/${user._id}/favorites`
+          );
+          if (response.ok) {
+            const data = await response.json();
+            setFavorites(data);
+          }
+        } catch (error) {
+          console.error("Failed to fetch favorites", error);
+        }
+      }
+      setLoading(false);
+    };
+
+    fetchFavorites();
+  }, []);
+
+  if (loading) {
+    return <LoadingSpinner />;
+  }
+
+  return (
+    <div className="min-h-screen bg-black text-white">
+      <Header activeTab="FAVORITES" onTabChange={() => {}} />
+      <div className="p-8">
+        <h1 className="text-3xl font-bold mb-8">My Favorites</h1>
+        {favorites.length === 0 ? (
+          <p>You have no favorites yet.</p>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+            {favorites.map((fav) => (
+              <Link to={`/model/${fav._id}`} key={fav._id} className="block">
+                <div className="bg-gray-800 rounded-lg overflow-hidden">
+                  <img
+                    src={fav.image}
+                    alt={fav.title}
+                    className="w-full h-64 object-cover"
+                  />
+                  <div className="p-4">
+                    <h2 className="text-xl font-bold">{fav.title}</h2>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default FavoritesPage;
