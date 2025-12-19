@@ -41,6 +41,16 @@ export const getModelById = async (req, res) => {
   try {
     const { id } = req.params;
 
+    // Validate ObjectId format and sanitize
+    if (!id || typeof id !== 'string') {
+      return res.status(400).json({ error: "Invalid model ID format" });
+    }
+
+    // Check for path traversal attempts
+    if (id.includes('..') || id.includes('/') || id.includes('\\')) {
+      return res.status(400).json({ error: "Invalid model ID" });
+    }
+
     // Validate ObjectId
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({ error: "Invalid model ID" });

@@ -14,8 +14,26 @@ export const login = async (req, res) => {
       });
     }
 
+    // Input sanitization - limit length and check for dangerous characters
+    if (username.length > 50 || password.length > 100) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid input length",
+      });
+    }
+
+    // Sanitize username - only allow alphanumeric and certain special chars
+    const sanitizedUsername = username.replace(/[^\w\-_.]/g, '');
+    
+    if (sanitizedUsername !== username) {
+      return res.status(400).json({
+        success: false,
+        message: "Username contains invalid characters",
+      });
+    }
+
     // Find user by username
-    const user = await User.findOne({ username });
+    const user = await User.findOne({ username: sanitizedUsername });
 
     if (!user) {
       return res.status(401).json({
@@ -70,8 +88,34 @@ export const register = async (req, res) => {
       });
     }
 
+    // Input sanitization - limit length and check for dangerous characters
+    if (username.length > 50 || password.length > 100) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid input length",
+      });
+    }
+
+    // Password strength validation
+    if (password.length < 6) {
+      return res.status(400).json({
+        success: false,
+        message: "Password must be at least 6 characters long",
+      });
+    }
+
+    // Sanitize username - only allow alphanumeric and certain special chars
+    const sanitizedUsername = username.replace(/[^\w\-_.]/g, '');
+    
+    if (sanitizedUsername !== username) {
+      return res.status(400).json({
+        success: false,
+        message: "Username contains invalid characters. Only letters, numbers, -, _, and . are allowed",
+      });
+    }
+
     // Check if user already exists
-    const existingUser = await User.findOne({ username });
+    const existingUser = await User.findOne({ username: sanitizedUsername });
     if (existingUser) {
       return res.status(400).json({
         success: false,
@@ -85,7 +129,7 @@ export const register = async (req, res) => {
 
     // Create a new user
     const newUser = new User({
-      username,
+      username: sanitizedUsername,
       password: hashedPassword,
     });
 
