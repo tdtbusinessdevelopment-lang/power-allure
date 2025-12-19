@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Header from "./Header";
 import LoadingSpinner from "./LoadingSpinner";
+import API_URL from "../config/api";
 
 const DetailPage = () => {
   const { id } = useParams();
@@ -68,7 +69,7 @@ const DetailPage = () => {
   useEffect(() => {
     const fetchModelData = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/models/${id}`);
+        const response = await fetch(`${API_URL}/models/${id}`);
 
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -137,7 +138,7 @@ const DetailPage = () => {
           };
 
       const response = await fetch(
-        `http://localhost:5000/api/users/favorites/${endpoint}`,
+        `${API_URL}/api/users/favorites/${endpoint}`,
         {
           method: "POST",
           headers: {

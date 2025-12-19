@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Header from "../components/Header";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { Link } from "react-router-dom";
+import API_URL from "../config/api";
 
 const FavoritesPage = () => {
   const [favorites, setFavorites] = useState([]);
@@ -13,7 +14,7 @@ const FavoritesPage = () => {
       if (user && user._id) {
         try {
           const response = await fetch(
-            `http://localhost:5000/api/users/${user._id}/favorites`
+            `${API_URL}/api/users/${user._id}/favorites`
           );
           if (response.ok) {
             const data = await response.json();

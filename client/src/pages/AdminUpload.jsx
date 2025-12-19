@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import API_URL from "../config/api";
 
 const AdminUpload = () => {
   const themeColor = "#d6b48e";
@@ -56,8 +57,8 @@ const AdminUpload = () => {
 
       const endpoint =
         collection === "local"
-          ? "http://localhost:5000/models/local"
-          : "http://localhost:5000/models/foreign";
+          ? `${API_URL}/models/local`
+          : `${API_URL}/models/foreign`;
 
       await axios.post(endpoint, finalData);
 
@@ -88,8 +89,8 @@ const AdminUpload = () => {
     try {
       const endpoint =
         collection === "local"
-          ? "http://localhost:5000/models/local"
-          : "http://localhost:5000/models/foreign";
+          ? `${API_URL}/models/local`
+          : `${API_URL}/models/foreign`;
       const response = await axios.get(endpoint);
       setModels(response.data);
     } catch (error) {
@@ -106,7 +107,7 @@ const AdminUpload = () => {
     }
 
     try {
-      await axios.delete(`http://localhost:5000/models/${modelId}`);
+      await axios.delete(`${API_URL}/models/${modelId}`);
       alert("Model deleted successfully!");
       // Refresh the list
       fetchModels();

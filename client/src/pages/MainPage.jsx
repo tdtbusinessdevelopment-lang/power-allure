@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import LoadingSpinner from "../components/LoadingSpinner";
+import API_URL from "../config/api";
 
 const MainPage = () => {
   const navigate = useNavigate();
@@ -34,7 +35,7 @@ const MainPage = () => {
 
     try {
       const endpoint = category === "LOCAL" ? "local" : "foreign";
-      const response = await fetch(`http://localhost:5000/models/${endpoint}`);
+      const response = await fetch(`${API_URL}/models/${endpoint}`);
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -78,7 +79,7 @@ const MainPage = () => {
       }
 
       const response = await fetch(
-        `http://localhost:5000/api/users/${user._id}/favorites`
+        `${API_URL}/api/users/${user._id}/favorites`
       );
 
       if (!response.ok) {
@@ -126,8 +127,8 @@ const MainPage = () => {
   const fetchCarouselModels = async () => {
     try {
       const [localResponse, foreignResponse] = await Promise.all([
-        fetch("http://localhost:5000/models/local"),
-        fetch("http://localhost:5000/models/foreign"),
+        fetch(`${API_URL}/models/local`),
+        fetch(`${API_URL}/models/foreign`),
       ]);
 
       const localData = await localResponse.json();
