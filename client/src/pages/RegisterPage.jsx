@@ -82,41 +82,45 @@ const RegisterPage = () => {
   }, []);
 
   return (
-    <div className="flex h-screen w-full">
-      {/* Left Section with Black Background and Diagonal Cut */}
+    <div className="flex h-screen w-full bg-[#D8AF7F]">
+      {/* Left Section with Black Background and Diagonal Cut - Hidden on Mobile */}
       <div
         data-section="left"
-        className={`relative w-1/2 h-full bg-black flex flex-col justify-center pl-16 z-10 transition-all duration-1000 ${
+        className={`hidden md:flex relative md:w-1/2 h-full bg-black flex-col justify-center pl-8 md:pl-16 z-10 transition-all duration-1000 ${
           visibleSections.has("left")
             ? "opacity-100 translate-x-0"
             : "opacity-0 -translate-x-10"
         }`}
         style={{ clipPath: "polygon(0 0, 100% 0, 60% 100%, 0 100%)" }}
       >
-        <h1 className="text-[#D8AF7F] text-5xl font-bold mb-4">Power Allure</h1>
-        <p className="text-[#D8AF7F] text-lg">
+        <h1 className="text-[#D8AF7F] text-4xl md:text-5xl font-bold mb-4">
+          Power Allure
+        </h1>
+        <p className="text-[#D8AF7F] text-base md:text-lg">
           Feel the power. Own the allure.
         </p>
       </div>
 
       {/* Right Section with Tan Background and Register Form */}
-      <div className="absolute inset-0 flex justify-end items-center bg-[#D8AF7F] z-0">
+      <div className="w-full md:w-auto md:absolute md:inset-0 flex md:justify-end justify-center items-center z-0">
         <div
           data-section="right"
-          className={`w-1/2 flex flex-col items-center transition-all duration-1000 delay-300 ${
+          className={`w-full md:w-1/2 flex flex-col items-center px-4 md:px-0 transition-all duration-1000 delay-300 ${
             visibleSections.has("right")
               ? "opacity-100 translate-x-0"
               : "opacity-0 translate-x-10"
           }`}
         >
-          <h2 className="text-black text-4xl font-bold mb-8">Register</h2>
-          <div className="w-80 flex flex-col gap-4">
+          <h2 className="text-black text-3xl md:text-4xl font-bold mb-6 md:mb-8">
+            Register
+          </h2>
+          <div className="w-full max-w-sm md:w-80 flex flex-col gap-4">
             <input
               type="text"
               placeholder="Enter username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="w-full p-4 rounded-xl bg-[#c5c4c4] placeholder-gray-600 text-black focus:outline-none"
+              className="w-full p-3 md:p-4 rounded-xl bg-[#c5c4c4] placeholder-gray-600 text-black focus:outline-none"
             />
             <input
               type="password"
@@ -128,7 +132,7 @@ const RegisterPage = () => {
                   handleRegister();
                 }
               }}
-              className="w-full p-4 rounded-xl bg-[#c5c4c4] placeholder-gray-600 text-black focus:outline-none"
+              className="w-full p-3 md:p-4 rounded-xl bg-[#c5c4c4] placeholder-gray-600 text-black focus:outline-none"
             />
             {error && (
               <div className="text-red-600 text-sm font-semibold text-center bg-red-100 p-3 rounded-lg">
@@ -144,13 +148,13 @@ const RegisterPage = () => {
           <button
             onClick={handleRegister}
             disabled={isLoading}
-            className={`mt-8 px-8 py-2 rounded-full bg-[#c5c4c4] text-black font-semibold transition-colors ${
+            className={`mt-6 md:mt-8 px-8 py-2 rounded-full bg-[#c5c4c4] text-black font-semibold transition-colors ${
               isLoading ? "opacity-50 cursor-not-allowed" : "hover:bg-[#b0afaf]"
             }`}
           >
             {isLoading ? "Registering..." : "Register"}
           </button>
-          <p className="mt-4 text-black">
+          <p className="mt-4 text-black text-sm md:text-base">
             Already have an account?{" "}
             <Link to="/login" className="font-semibold hover:underline">
               Login here

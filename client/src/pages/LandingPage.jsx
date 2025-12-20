@@ -11,11 +11,11 @@ const LandingPage = () => {
       <LandingHeader />
 
       {/* Main Content */}
-      <main className="flex flex-col lg:flex-row items-start justify-between pt-20 pl-8 lg:pt-24 lg:pl-16 pr-8">
+      <main className="flex flex-col lg:flex-row items-start justify-between pt-8 px-4 md:pt-16 md:px-8 lg:pt-24 lg:pl-16 lg:pr-8">
         {/* Left Section: Text Content */}
-        <div className="lg:w-2/3 text-left mb-12 lg:mb-0 pr-8">
+        <div className="lg:w-2/3 text-left mb-8 md:mb-12 lg:mb-0 lg:pr-8">
           <h1
-            className="text-7xl lg:text-9xl font-bold mb-6 leading-tight animate-fade-in-up"
+            className="text-4xl md:text-6xl lg:text-9xl font-bold mb-4 md:mb-6 leading-tight animate-fade-in-up"
             style={{ color: themeColor }}
           >
             Welcome to
@@ -23,7 +23,7 @@ const LandingPage = () => {
             Power Allure
           </h1>
           <p
-            className="text-xl lg:text-4xl mb-8 max-w-4xl font-extralight animate-fade-in-up animation-delay-300"
+            className="text-base md:text-xl lg:text-4xl mb-6 md:mb-8 max-w-4xl font-extralight animate-fade-in-up animation-delay-300"
             style={{ color: themeColor }}
           >
             Your gateway to discovering fresh faces and standout talent. Browse
@@ -33,7 +33,7 @@ const LandingPage = () => {
             creative vision here.
           </p>
           <button
-            className="px-8 py-3 rounded-full text-black font-bold text-lg hover:bg-opacity-80 transition-all transform hover:scale-105 animate-fade-in-up animation-delay-600"
+            className="px-6 md:px-8 py-2 md:py-3 rounded-full text-black font-bold text-base md:text-lg hover:bg-opacity-80 transition-all transform hover:scale-105 animate-fade-in-up animation-delay-600"
             style={{ backgroundColor: themeColor }}
           >
             Get Started
@@ -43,7 +43,7 @@ const LandingPage = () => {
         {/* Right Section: Video */}
         <div className="lg:w-1/3 w-full flex justify-center lg:justify-start lg:pl-12">
           <div
-            className="rounded-3xl overflow-hidden border-4 w-9/12 lg:h-[700px] shadow-2xl"
+            className="rounded-3xl overflow-hidden border-4 w-full md:w-9/12 h-[300px] md:h-[500px] lg:h-[700px] shadow-2xl"
             style={{ borderColor: themeColor }}
           >
             <video

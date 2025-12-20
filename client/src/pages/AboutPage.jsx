@@ -103,7 +103,7 @@ const AboutPage = () => {
     <div className="min-h-screen bg-black text-white font-sans overflow-x-hidden snap-y snap-proximity overflow-y-scroll h-screen">
       <LandingHeader />
 
-      <div className="max-w-6xl mx-auto px-6 py-16 flex flex-col gap-32">
+      <div className="max-w-6xl mx-auto px-4 md:px-6 py-12 md:py-16 flex flex-col gap-16 md:gap-24 lg:gap-32">
         {/* --- SECTION 1: ABOUT US --- */}
         <section
           data-section="about"
@@ -114,7 +114,7 @@ const AboutPage = () => {
           }`}
         >
           <div className="w-full lg:w-1/2 flex justify-center">
-            <div className="rounded-3xl overflow-hidden w-full h-[80vh] shadow-2xl">
+            <div className="rounded-3xl overflow-hidden w-full h-[50vh] md:h-[60vh] lg:h-[80vh] shadow-2xl">
               <video
                 src={heroVideo}
                 autoPlay
@@ -225,7 +225,7 @@ const AboutPage = () => {
             WHY CHOOSE US?
           </h2>
 
-          <div className="flex flex-col gap-12 md:gap-8">
+          <div className="flex flex-col gap-8 md:gap-10 lg:gap-12">
             {features.map((feature, index) => {
               const isEven = index % 2 === 0;
               const flexDirection = isEven

@@ -15,14 +15,14 @@ const ProfilePage = () => {
       </header>
 
       {/* Main Content Area */}
-      <main className="flex-grow flex flex-col md:flex-row items-center justify-center px-6 md:px-20 lg:px-32 gap-12 md:gap-20">
+      <main className="flex-grow flex flex-col md:flex-row items-center justify-center px-6 md:px-20 lg:px-32 gap-8 md:gap-12 lg:gap-20">
         {/* Left Side: Greeting and Action Buttons */}
         <div className="flex-1 flex flex-col items-center md:items-start">
-          <h2 className="text-6xl md:text-8xl font-bold mb-10 tracking-tight">
-            Hi, I’m Mark.
+          <h2 className="text-4xl md:text-6xl lg:text-8xl font-bold mb-6 md:mb-10 tracking-tight text-center md:text-left">
+            Hi, I'm Mark.
           </h2>
 
-          <div className="flex items-center">
+          <div className="flex flex-col md:flex-row items-center gap-3 md:gap-0">
             {/* Edit Profile Button */}
             <button
               onClick={() => navigate("/edit")}
@@ -31,8 +31,8 @@ const ProfilePage = () => {
               Edit Profile
             </button>
 
-            {/* The Bridge Line */}
-            <div className="w-6 h-[1px] bg-[#3A3A3A]"></div>
+            {/* The Bridge Line - Hidden on mobile */}
+            <div className="hidden md:block w-6 h-[1px] bg-[#3A3A3A]"></div>
 
             {/* Home Button */}
             <button
@@ -42,8 +42,8 @@ const ProfilePage = () => {
               Home
             </button>
 
-            {/* The Bridge Line */}
-            <div className="w-6 h-[1px] bg-[#3A3A3A]"></div>
+            {/* The Bridge Line - Hidden on mobile */}
+            <div className="hidden md:block w-6 h-[1px] bg-[#3A3A3A]"></div>
 
             {/* Logout Button */}
             <button
@@ -61,7 +61,7 @@ const ProfilePage = () => {
 
         {/* Right Side: Circular Profile Image */}
         <div className="flex-1 flex justify-center items-center">
-          <div className="relative w-72 h-72 md:w-[450px] md:h-[450px] rounded-full border-[3px] border-[#C5A27D] overflow-hidden">
+          <div className="relative w-64 h-64 md:w-80 md:h-80 lg:w-[450px] lg:h-[450px] rounded-full border-[3px] border-[#C5A27D] overflow-hidden">
             <img
               src="https://via.placeholder.com/600" // Replace with your image asset
               alt="Mark"

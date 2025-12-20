@@ -37,12 +37,14 @@ const FavoritesPage = () => {
   return (
     <div className="min-h-screen bg-black text-white">
       <Header activeTab="FAVORITES" onTabChange={() => {}} />
-      <div className="p-8">
-        <h1 className="text-3xl font-bold mb-8">My Favorites</h1>
+      <div className="p-4 md:p-6 lg:p-8">
+        <h1 className="text-2xl md:text-3xl font-bold mb-6 md:mb-8">
+          My Favorites
+        </h1>
         {favorites.length === 0 ? (
           <p>You have no favorites yet.</p>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8">
             {favorites.map((fav) => (
               <Link to={`/model/${fav._id}`} key={fav._id} className="block">
                 <div className="bg-gray-800 rounded-lg overflow-hidden">

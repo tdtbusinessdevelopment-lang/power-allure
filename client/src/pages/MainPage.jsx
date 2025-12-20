@@ -231,7 +231,7 @@ const MainPage = () => {
         </div>
 
         {/* Navigation Tabs */}
-        <div className="flex flex-wrap justify-center items-center gap-6 md:gap-10 mb-12">
+        <div className="flex flex-wrap justify-center items-center gap-4 md:gap-6 lg:gap-10 mb-8 md:mb-12">
           {/* LOCAL (Gold) */}
           <button
             onClick={() => handleTabClick("LOCAL")}
@@ -253,7 +253,7 @@ const MainPage = () => {
           {/* Favorites (Title Case) */}
           <button
             onClick={() => handleTabClick("FAVORITES")}
-            className="text-base md:text-lg font-bold transition-colors hover:text-gray-300"
+            className="text-sm md:text-base lg:text-lg font-bold transition-colors hover:text-gray-300"
             style={{ color: activeTab === "FAVORITES" ? themeColor : "white" }}
           >
             Favorites
@@ -262,7 +262,7 @@ const MainPage = () => {
           {/* Profile (Title Case) */}
           <button
             onClick={() => navigate("/profile")}
-            className="text-base md:text-lg font-bold transition-colors hover:text-gray-300"
+            className="text-sm md:text-base lg:text-lg font-bold transition-colors hover:text-gray-300"
             style={{ color: activeTab === "PROFILE" ? themeColor : "white" }}
           >
             Profile
@@ -270,7 +270,7 @@ const MainPage = () => {
         </div>
 
         {/* Bottom Grid (Model Cards) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full pb-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8 w-full pb-12 md:pb-20">
           {loading ? (
             <div className="col-span-full flex justify-center items-center min-h-[400px]">
               <LoadingSpinner message="Loading models" size="large" />

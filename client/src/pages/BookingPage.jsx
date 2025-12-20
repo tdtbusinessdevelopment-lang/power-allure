@@ -4,7 +4,7 @@ import Header from "../components/LandingHeader";
 const BookingPage = () => {
   const themeColor = "#dcb887";
   const [activeTab, setActiveTab] = useState("LOCAL");
-  
+
   const [formData, setFormData] = useState({
     name: "",
     company: "",
@@ -33,34 +33,34 @@ const BookingPage = () => {
       <Header activeTab={activeTab} onTabChange={setActiveTab} />
 
       {/* Main Content */}
-      <div className="flex items-center justify-center min-h-[calc(100vh-100px)] p-8">
+      <div className="flex items-center justify-center min-h-[calc(100vh-100px)] p-4 md:p-8">
         <div
-          className="w-full max-w-6xl rounded-3xl p-12 flex flex-col lg:flex-row gap-12 items-center"
+          className="w-full max-w-6xl rounded-3xl p-6 md:p-10 lg:p-12 flex flex-col lg:flex-row gap-8 md:gap-10 lg:gap-12 items-center"
           style={{ backgroundColor: "#4e4847" }}
         >
           {/* Left Side - Text Content */}
-          <div className="w-full lg:w-1/2 space-y-6">
+          <div className="w-full lg:w-1/2 space-y-4 md:space-y-6">
             <p
-              className="text-sm uppercase tracking-wider italic"
+              className="text-xs md:text-sm uppercase tracking-wider italic"
               style={{ color: themeColor }}
             >
               WE'RE HERE TO ELEVATE YOUR EXPERIENCE
             </p>
 
-            <h2 className="text-5xl font-bold">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold">
               <span className="italic" style={{ color: themeColor }}>
                 Discuss
               </span>{" "}
               <span className="text-white">Your Needs.</span>
             </h2>
 
-            <p className="text-gray-300 text-lg leading-relaxed italic">
+            <p className="text-gray-300 text-base md:text-lg leading-relaxed italic">
               Looking for professional PR models tailored to your brand, event,
               or campaign?
             </p>
 
             <p
-              className="text-lg leading-relaxed italic"
+              className="text-base md:text-lg leading-relaxed italic"
               style={{ color: themeColor }}
             >
               Reach out to Power Allure and let us deliver elegance, discretion,
@@ -71,7 +71,7 @@ const BookingPage = () => {
           {/* Right Side - Form */}
           <div className="w-full lg:w-1/2">
             <div
-              className="rounded-3xl p-8 shadow-lg"
+              className="rounded-3xl p-6 md:p-8 shadow-lg"
               style={{ backgroundColor: themeColor }}
             >
               <form onSubmit={handleSubmit} className="space-y-6">
