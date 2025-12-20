@@ -97,6 +97,8 @@ This guide walks you through deploying your full-stack application on Render's f
      Publish Directory: dist
      ```
 
+   > **Note**: The `client/public/_redirects` file is critical for SPA routing. It ensures that all routes (like `/about` or `/admin/upload`) serve `index.html`, allowing React Router to handle routing client-side instead of returning 404 errors.
+
 2. **Environment Variables**:
    Click "Advanced" → "Add Environment Variable":
 
