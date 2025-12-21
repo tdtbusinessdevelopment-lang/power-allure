@@ -164,9 +164,9 @@ const BookingPage = () => {
       <Header activeTab={activeTab} onTabChange={setActiveTab} />
 
       {/* Main Content */}
-      <div className="flex items-center justify-center min-h-[calc(100vh-100px)] p-4 md:p-8">
+      <div className="flex items-center justify-center min-h-[calc(100vh-100px)] p-4 md:p-8 animate-fade-in">
         <div
-          className="w-full max-w-6xl rounded-3xl p-6 md:p-10 lg:p-12 flex flex-col lg:flex-row gap-8 md:gap-10 lg:gap-12 items-center"
+          className="w-full max-w-6xl rounded-3xl p-6 md:p-10 lg:p-12 flex flex-col lg:flex-row gap-8 md:gap-10 lg:gap-12 items-center animate-fade-in-up"
           style={{ backgroundColor: "#4e4847" }}
         >
           {/* Left Side - Text Content */}

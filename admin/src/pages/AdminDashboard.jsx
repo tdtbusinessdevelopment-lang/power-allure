@@ -102,7 +102,7 @@ const AdminDashboard = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-black p-6 md:p-8">
+    <div className="min-h-screen bg-black p-6 md:p-8 animate-fade-in">
       {/* Page Header */}
       <div className="mb-8">
         <h1
@@ -140,47 +140,20 @@ const AdminDashboard = () => {
 
       {/* Content Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Activity Feed - Takes 2 columns */}
+        {/* Quick Actions - Takes full width since activity is removed */}
         <div
-          className="lg:col-span-2 bg-black border rounded-2xl p-6"
-          style={{ borderColor: themeColor }}
-        >
-          <h2 className="text-2xl font-bold mb-6" style={{ color: themeColor }}>
-            Recent Activity
-          </h2>
-          <div className="space-y-4">
-            {recentActivities.map((activity, index) => (
-              <div
-                key={index}
-                className="flex items-start gap-4 p-4 rounded-xl bg-gray-900 bg-opacity-30 transition-all hover:bg-opacity-50"
-              >
-                <div
-                  className="w-2 h-2 rounded-full mt-2"
-                  style={{ backgroundColor: themeColor }}
-                ></div>
-                <div className="flex-1">
-                  <p className="text-white">{activity.action}</p>
-                  <p className="text-gray-500 text-sm mt-1">{activity.time}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Quick Actions - Takes 1 column */}
-        <div
-          className="bg-black border rounded-2xl p-6"
+          className="lg:col-span-3 bg-black border rounded-2xl p-6"
           style={{ borderColor: themeColor }}
         >
           <h2 className="text-2xl font-bold mb-6" style={{ color: themeColor }}>
             Quick Actions
           </h2>
-          <div className="space-y-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {quickActions.map((action, index) => (
               <button
                 key={index}
                 onClick={() => (window.location.href = action.path)}
-                className="w-full p-4 rounded-xl border text-white font-semibold transition-all hover:text-black text-left flex items-center gap-3"
+                className="p-6 rounded-xl border text-white font-semibold transition-all hover:text-black hover:scale-105 flex flex-col items-center gap-3 text-center"
                 style={{ borderColor: themeColor }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.backgroundColor = themeColor;
@@ -189,8 +162,8 @@ const AdminDashboard = () => {
                   e.currentTarget.style.backgroundColor = "transparent";
                 }}
               >
-                <span className="text-2xl">{action.icon}</span>
-                <span>{action.label}</span>
+                <span className="text-4xl mb-2">{action.icon}</span>
+                <span className="text-lg">{action.label}</span>
               </button>
             ))}
           </div>

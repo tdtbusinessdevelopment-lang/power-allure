@@ -109,7 +109,7 @@ const AdminModels = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black p-6 md:p-8">
+    <div className="min-h-screen bg-black p-6 md:p-8 animate-fade-in">
       {/* Page Header */}
       <div className="mb-8">
         <h1

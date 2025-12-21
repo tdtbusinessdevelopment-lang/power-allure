@@ -156,7 +156,7 @@ const AdminBookings = () => {
   }
 
   return (
-    <div className="min-h-screen bg-black p-6 md:p-8">
+    <div className="min-h-screen bg-black p-6 md:p-8 animate-fade-in">
       {/* Page Header */}
       <div className="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
@@ -222,6 +222,12 @@ const AdminBookings = () => {
                     className="text-left p-4 font-semibold"
                     style={{ color: themeColor }}
                   >
+                    Category
+                  </th>
+                  <th
+                    className="text-left p-4 font-semibold"
+                    style={{ color: themeColor }}
+                  >
                     Event
                   </th>
                   <th
@@ -260,6 +266,9 @@ const AdminBookings = () => {
                     <td className="p-4 text-white">{booking.userName}</td>
                     <td className="p-4 text-white">{booking.company}</td>
                     <td className="p-4 text-white">{booking.modelName}</td>
+                    <td className="p-4 text-white capitalize">
+                      {booking.modelCategory || "Local"}
+                    </td>
                     <td className="p-4 text-white">{booking.event}</td>
                     <td className="p-4 text-white">{booking.eventDate}</td>
                     <td className="p-4 text-white">{booking.eventTime}</td>
