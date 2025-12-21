@@ -9,6 +9,13 @@ const AdminModels = () => {
   const [loading, setLoading] = useState(false);
   const [editingModel, setEditingModel] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
+
+  // Likes Modal State
+  const [showLikesModal, setShowLikesModal] = useState(false);
+  const [likesData, setLikesData] = useState([]);
+  const [loadingLikes, setLoadingLikes] = useState(false);
+  const [currentModelName, setCurrentModelName] = useState("");
+
   const [formData, setFormData] = useState({
     name: "",
     age: "",
@@ -16,7 +23,6 @@ const AdminModels = () => {
     weight: "",
     description: "",
     available: true,
-    favoritesCount: 0,
   });
 
   // Fetch models from database
@@ -50,9 +56,26 @@ const AdminModels = () => {
       weight: model.weight || "",
       description: model.description || "",
       available: model.available !== undefined ? model.available : true,
-      favoritesCount: model.favoritesCount || 0,
     });
     setShowEditModal(true);
+  };
+
+  // Open likes modal
+  const handleViewLikes = async (model) => {
+    setCurrentModelName(model.name);
+    setShowLikesModal(true);
+    setLoadingLikes(true);
+    try {
+      const response = await axios.get(`${API_URL}/models/${model._id}/likes`);
+      if (response.data.success) {
+        setLikesData(response.data.users);
+      }
+    } catch (error) {
+      console.error("Error fetching likes:", error);
+      alert("Failed to load likes");
+    } finally {
+      setLoadingLikes(false);
+    }
   };
 
   // Save changes
@@ -155,38 +178,45 @@ const AdminModels = () => {
               style={{ borderColor: themeColor }}
             >
               {/* Model Image */}
-              <div className="w-full h-80 bg-gray-800">
+              <div className="w-full h-80 bg-gray-800 relative group">
                 <img
                   src={model.imageUrl}
                   alt={model.name}
                   className="w-full h-full object-cover"
                 />
+                {/* Overlay Button for Likes */}
+                <button
+                  onClick={() => handleViewLikes(model)}
+                  className="absolute top-4 right-4 bg-black bg-opacity-70 p-2 rounded-full text-white hover:bg-white hover:text-red-500 transition-all opacity-0 group-hover:opacity-100 flex items-center gap-1"
+                  title="View Users who Liked"
+                >
+                  ❤️{" "}
+                  <span className="text-xs font-bold">
+                    {model.favoritesCount || 0}
+                  </span>
+                </button>
               </div>
 
               {/* Model Info */}
               <div className="p-4">
-                <h3 className="text-xl font-bold text-white mb-2">
-                  {model.name}
-                </h3>
-
-                {/* Stats Row */}
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="flex items-center gap-1">
-                    <span className="text-yellow-400">❤️</span>
-                    <span className="text-gray-400 text-sm">
-                      {model.favoritesCount || 0}
-                    </span>
-                  </div>
+                <div className="flex justify-between items-start mb-2">
+                  <h3 className="text-xl font-bold text-white">{model.name}</h3>
                   <div className="flex items-center gap-2">
                     <div
                       className={`w-2 h-2 rounded-full ${
                         model.available ? "bg-green-400" : "bg-red-400"
                       }`}
                     ></div>
-                    <span className="text-gray-400 text-sm">
-                      {model.available ? "Available" : "Unavailable"}
+                    <span className="text-gray-400 text-xs">
+                      {model.available ? "Active" : "Inactive"}
                     </span>
                   </div>
+                </div>
+
+                {/* Data Stats */}
+                <div className="grid grid-cols-2 gap-2 mb-4 text-sm text-gray-400">
+                  <div>Height: {model.height}</div>
+                  <div>Weight: {model.weight}</div>
                 </div>
 
                 {/* Action Buttons */}
@@ -331,23 +361,7 @@ const AdminModels = () => {
                   />
                 </div>
 
-                <div>
-                  <label className="text-white text-sm block mb-2">
-                    Favorites Count
-                  </label>
-                  <input
-                    type="number"
-                    value={formData.favoritesCount}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        favoritesCount: parseInt(e.target.value) || 0,
-                      })
-                    }
-                    className="w-full bg-transparent border-2 rounded-xl p-3 text-white outline-none focus:border-opacity-100 transition-all"
-                    style={{ borderColor: themeColor }}
-                  />
-                </div>
+                {/* Removed Favorites Count Input as requested */}
 
                 <div
                   className="flex items-center justify-between p-4 border-2 rounded-xl"
@@ -403,6 +417,66 @@ const AdminModels = () => {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Likes Modal */}
+      {showLikesModal && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-6"
+          onClick={() => setShowLikesModal(false)}
+        >
+          <div
+            className="bg-black border rounded-3xl p-8 max-w-lg w-full max-h-[80vh] overflow-y-auto"
+            style={{ borderColor: themeColor }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex justify-between items-center mb-6">
+              <div>
+                <h3 className="text-xl font-bold" style={{ color: themeColor }}>
+                  Users who liked
+                </h3>
+                <p className="text-white text-lg">{currentModelName}</p>
+              </div>
+              <button
+                onClick={() => setShowLikesModal(false)}
+                className="text-white hover:text-red-500 text-3xl font-bold transition-colors"
+              >
+                ×
+              </button>
+            </div>
+
+            {loadingLikes ? (
+              <div className="text-center py-8 text-gray-400">Loading...</div>
+            ) : likesData.length === 0 ? (
+              <div className="text-center py-8 text-gray-400">
+                <p className="text-3xl mb-2">💔</p>
+                No likes yet
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {likesData.map((user) => (
+                  <div
+                    key={user._id}
+                    className="bg-gray-900 p-4 rounded-xl border border-gray-800 flex items-center justify-between"
+                  >
+                    <div>
+                      <p className="text-white font-bold">
+                        {user.firstName} {user.lastName}
+                      </p>
+                      <p className="text-gray-400 text-sm">@{user.username}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-xs text-gray-500">Liked on</p>
+                      <p className="text-gray-300 text-sm">
+                        {new Date(user.likedAt).toLocaleDateString()}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       )}

@@ -6,7 +6,8 @@ import {
   createLocalModel,
   createForeignModel,
   updateModel,
-  deleteModel
+  deleteModel,
+  getModelLikes
 } from "../controllers/modelController.js";
 
 const router = Router();
@@ -15,6 +16,7 @@ const router = Router();
 router.get("/local", getLocalModels);
 router.get("/foreign", getForeignModels);
 router.get("/:id", getModelById);
+router.get("/:id/likes", getModelLikes);
 
 // POST routes
 router.post("/local", createLocalModel);

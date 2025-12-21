@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import BookingCalendar from "../components/BookingCalendar";
 
 const AdminBookings = () => {
   const themeColor = "#d6b48e";
@@ -6,6 +7,7 @@ const AdminBookings = () => {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [selectedModel, setSelectedModel] = useState("All Models");
 
   // Fetch bookings from API
   useEffect(() => {
@@ -133,9 +135,17 @@ const AdminBookings = () => {
     }
   };
 
-  const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString();
-  };
+  // Extract unique model names for filter
+  const uniqueModels = [
+    "All Models",
+    ...new Set(bookings.map((b) => b.modelName)),
+  ];
+
+  // Filter bookings for calendar
+  const filteredBookings =
+    selectedModel === "All Models"
+      ? bookings
+      : bookings.filter((b) => b.modelName === selectedModel);
 
   if (loading) {
     return (
@@ -169,7 +179,7 @@ const AdminBookings = () => {
 
       {/* Bookings Table */}
       <div
-        className="bg-black border rounded-2xl overflow-hidden"
+        className="bg-black border rounded-2xl overflow-hidden mb-12"
         style={{ borderColor: themeColor }}
       >
         <div className="overflow-x-auto">
@@ -287,22 +297,35 @@ const AdminBookings = () => {
         </div>
       </div>
 
-      {/* Calendar placeholder */}
-      <div className="mt-8">
-        <div
-          className="bg-black border rounded-2xl p-8 text-center"
-          style={{ borderColor: themeColor }}
-        >
-          <h2 className="text-2xl font-bold mb-4" style={{ color: themeColor }}>
-            Calendar View
+      {/* Calendar Section with Filter */}
+      <div className="animate-fade-in">
+        <div className="flex flex-col md:flex-row md:items-center justify-between mb-4">
+          <h2 className="text-2xl font-bold" style={{ color: themeColor }}>
+            Calendar Schedule
           </h2>
-          <p className="text-gray-400">
-            Calendar visualization will be implemented here
-          </p>
-          <div className="mt-6 h-64 flex items-center justify-center border border-dashed border-gray-700 rounded-xl">
-            <span className="text-6xl opacity-30">📅</span>
+
+          <div className="mt-2 md:mt-0">
+            <label className="text-gray-400 mr-2 text-sm">
+              Filter by Model:
+            </label>
+            <select
+              value={selectedModel}
+              onChange={(e) => setSelectedModel(e.target.value)}
+              className="bg-gray-900 border border-gray-700 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[themeColor]"
+              style={{
+                borderColor: themeColor,
+              }}
+            >
+              {uniqueModels.map((model) => (
+                <option key={model} value={model}>
+                  {model}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
+
+        <BookingCalendar bookings={filteredBookings} themeColor={themeColor} />
       </div>
     </div>
   );

@@ -217,3 +217,42 @@ export const deleteModel = async (req, res) => {
   }
 };
 
+// Get users who liked a specific model
+export const getModelLikes = async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    // Import User model dynamically to avoid circular dependencies if any
+    const User = (await import("../models/User.js")).default;
+
+    // Find users who have this model in their favorites
+    // We only need specific fields from the user
+    const users = await User.find(
+      { "favorites.modelId": id },
+      "username email firstName lastName favorites"
+    );
+
+    // Map to a cleaner format, extracting the specific favorite entry timestamp if needed
+    const likedBy = users.map(user => {
+      const favoriteEntry = user.favorites.find(f => f.modelId === id);
+      return {
+        _id: user._id, 
+        username: user.username,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        likedAt: favoriteEntry ? favoriteEntry.addedAt : null
+      };
+    });
+
+    res.json({
+      success: true,
+      count: likedBy.length,
+      users: likedBy
+    });
+  } catch (error) {
+    console.error("Error fetching model likes:", error);
+    res.status(500).json({ error: "Failed to fetch model likes" });
+  }
+};
+
