@@ -13,68 +13,92 @@ const AdminDashboard = () => {
   ]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Fetch dashboard stats
-  useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        const response = await fetch(`${API_URL}/api/dashboard/stats`);
-        const data = await response.json();
+  const [recentActivities, setRecentActivities] = useState([]);
 
-        if (data.success) {
+  // Fetch dashboard stats and activity
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [statsRes, activityRes] = await Promise.all([
+          fetch(`${API_URL}/api/dashboard/stats`),
+          fetch(`${API_URL}/api/dashboard/activity`),
+        ]);
+
+        const statsData = await statsRes.json();
+        const activityData = await activityRes.json();
+
+        if (statsData.success) {
           setStats([
             {
               label: "Total Users",
-              value: data.stats.totalUsers.toString(),
+              value: statsData.stats.totalUsers.toString(),
               icon: "👥",
               change: "",
             },
             {
               label: "Total Models",
-              value: data.stats.totalModels.toString(),
+              value: statsData.stats.totalModels.toString(),
               icon: "✨",
-              change: `Local: ${data.stats.totalLocalModels} | Foreign: ${data.stats.totalForeignModels}`,
+              change: `Local: ${statsData.stats.totalLocalModels} | Foreign: ${statsData.stats.totalForeignModels}`,
             },
             {
               label: "Total Bookings",
-              value: data.stats.totalBookings?.toString() || "0",
+              value: statsData.stats.totalBookings?.toString() || "0",
               icon: "📅",
               change: `Pending: ${
-                data.stats.pendingBookings || 0
-              } | Confirmed: ${data.stats.confirmedBookings || 0}`,
+                statsData.stats.pendingBookings || 0
+              } | Confirmed: ${statsData.stats.confirmedBookings || 0}`,
             },
             {
               label: "Active Models",
-              value: data.stats.activeModels.toString(),
+              value: statsData.stats.activeModels.toString(),
               icon: "🟢",
-              change: `Local: ${data.stats.activeLocalModels} | Foreign: ${data.stats.activeForeignModels}`,
+              change: `Local: ${statsData.stats.activeLocalModels} | Foreign: ${statsData.stats.activeForeignModels}`,
             },
           ]);
         }
+
+        if (activityData.success) {
+          setRecentActivities(
+            activityData.activities.map((activity) => ({
+              time: formatTimeAgo(new Date(activity.time)),
+              action: activity.action,
+            }))
+          );
+        }
       } catch (err) {
-        console.error("Error fetching stats:", err);
+        console.error("Error fetching dashboard data:", err);
       } finally {
         setIsLoading(false);
       }
     };
 
-    fetchStats();
+    fetchData();
     // Refresh stats every 30 seconds
-    const interval = setInterval(fetchStats, 30000);
+    const interval = setInterval(fetchData, 30000);
     return () => clearInterval(interval);
   }, []);
 
-  const recentActivities = [
-    { time: "10 mins ago", action: "New user registered: john_doe" },
-    { time: "25 mins ago", action: "Model uploaded: Sarah Anderson" },
-    { time: "1 hour ago", action: "Booking confirmed: Model #12345" },
-    { time: "2 hours ago", action: "User updated favorites" },
-    { time: "3 hours ago", action: "New booking request received" },
-  ];
+  const formatTimeAgo = (date) => {
+    const seconds = Math.floor((new Date() - date) / 1000);
+    let interval = seconds / 31536000;
+    if (interval > 1) return Math.floor(interval) + " years ago";
+    interval = seconds / 2592000;
+    if (interval > 1) return Math.floor(interval) + " months ago";
+    interval = seconds / 86400;
+    if (interval > 1) return Math.floor(interval) + " days ago";
+    interval = seconds / 3600;
+    if (interval > 1) return Math.floor(interval) + " hours ago";
+    interval = seconds / 60;
+    if (interval > 1) return Math.floor(interval) + " mins ago";
+    return Math.floor(seconds) + " seconds ago";
+  };
 
   const quickActions = [
     { label: "Add New Model", icon: "➕", path: "/upload" },
     { label: "View All Models", icon: "🖼️", path: "/models" },
     { label: "Manage Users", icon: "👥", path: "/users" },
+    { label: "Manage Bookings", icon: "📅", path: "/bookings" },
   ];
 
   return (

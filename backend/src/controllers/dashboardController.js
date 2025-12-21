@@ -53,3 +53,65 @@ export const getDashboardStats = async (req, res) => {
     });
   }
 };
+// Get recent activity
+export const getRecentActivity = async (req, res) => {
+  try {
+    // 1. Get recent users (limited to 5)
+    const recentUsers = await User.find()
+      .sort({ createdAt: -1 })
+      .limit(5)
+      .select('username createdAt');
+
+    // 2. Get recent bookings (limited to 5)
+    const recentBookings = await Booking.find()
+      .sort({ createdAt: -1 })
+      .limit(5)
+      .select('modelName createdAt status');
+
+    // 3. Get recent models (limited to 5)
+    const recentLocalModels = await LocalModel.find()
+      .sort({ createdAt: -1 })
+      .limit(5)
+      .select('name createdAt');
+      
+    // Combine activities
+    const activities = [
+      ...recentUsers.map(u => ({
+        type: 'user',
+        action: `New user registered: ${u.username}`,
+        time: u.createdAt,
+        originalTime: new Date(u.createdAt)
+      })),
+      ...recentBookings.map(b => ({
+        type: 'booking',
+        action: `New booking for ${b.modelName} (${b.status})`,
+        time: b.createdAt,
+        originalTime: new Date(b.createdAt)
+      })),
+      ...recentLocalModels.map(m => ({
+        type: 'model',
+        action: `Model uploaded: ${m.name}`,
+        time: m.createdAt,
+        originalTime: new Date(m.createdAt)
+      }))
+    ];
+
+    // Sort combined activities by date (newest first) and take top 10
+    activities.sort((a, b) => b.originalTime - a.originalTime);
+    const topActivities = activities.slice(0, 10);
+
+    // Format time for display (e.g., "10 mins ago")
+    // Note: detailed formatting is better done on frontend, sending ISO string here
+    
+    res.status(200).json({
+      success: true,
+      activities: topActivities
+    });
+  } catch (error) {
+    console.error("Get recent activity error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error while fetching recent activity",
+    });
+  }
+};

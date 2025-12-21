@@ -220,21 +220,7 @@ const BookingPage = () => {
               )}
 
               <form onSubmit={handleSubmit} className="space-y-6">
-                {/* Name Field */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Name
-                  </label>
-                  <input
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    placeholder="James Smith"
-                    className="w-full px-4 py-3 rounded-full bg-[#c9a876] border-none focus:outline-none focus:ring-2 focus:ring-gray-600 text-gray-700 placeholder-gray-600"
-                    required
-                  />
-                </div>
+                {/* Name is auto-filled in background from user account - not shown to user */}
 
                 {/* Company Field */}
                 <div>
