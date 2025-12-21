@@ -5,6 +5,7 @@ import productRoutes from "./routes/productRoutes.js";
 import modelRoutes from "./routes/modelRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import userRoutes from './routes/userRoutes.js';
+import dashboardRoutes from './routes/dashboardRoutes.js';
 
 const app = express();
 
@@ -43,6 +44,7 @@ app.use("/products", productRoutes);
 app.use("/models", modelRoutes);
 app.use("/auth", authRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/dashboard', dashboardRoutes);
 
 
 app.get("/", (req, res) => {

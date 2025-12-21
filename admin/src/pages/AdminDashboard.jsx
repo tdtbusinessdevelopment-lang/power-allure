@@ -1,14 +1,65 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import API_URL from "../config/api";
 
 const AdminDashboard = () => {
   const themeColor = "#d6b48e";
 
-  const stats = [
-    { label: "Total Users", value: "247", icon: "👥", change: "+12%" },
-    { label: "Total Models", value: "89", icon: "✨", change: "+5%" },
-    { label: "Total Bookings", value: "1,234", icon: "📅", change: "+18%" },
-    { label: "Active Models", value: "76", icon: "🟢", change: "+3%" },
-  ];
+  // State for stats
+  const [stats, setStats] = useState([
+    { label: "Total Users", value: "...", icon: "👥", change: "" },
+    { label: "Total Models", value: "...", icon: "✨", change: "" },
+    { label: "Total Bookings", value: "—", icon: "📅", change: "Coming Soon" },
+    { label: "Active Models", value: "...", icon: "🟢", change: "" },
+  ]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Fetch dashboard stats
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const response = await fetch(`${API_URL}/api/dashboard/stats`);
+        const data = await response.json();
+
+        if (data.success) {
+          setStats([
+            {
+              label: "Total Users",
+              value: data.stats.totalUsers.toString(),
+              icon: "👥",
+              change: "",
+            },
+            {
+              label: "Total Models",
+              value: data.stats.totalModels.toString(),
+              icon: "✨",
+              change: `Local: ${data.stats.totalLocalModels} | Foreign: ${data.stats.totalForeignModels}`,
+            },
+            {
+              label: "Total Bookings",
+              value: "—",
+              icon: "📅",
+              change: "Coming Soon",
+            },
+            {
+              label: "Active Models",
+              value: data.stats.activeModels.toString(),
+              icon: "🟢",
+              change: `Local: ${data.stats.activeLocalModels} | Foreign: ${data.stats.activeForeignModels}`,
+            },
+          ]);
+        }
+      } catch (err) {
+        console.error("Error fetching stats:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchStats();
+    // Refresh stats every 30 seconds
+    const interval = setInterval(fetchStats, 30000);
+    return () => clearInterval(interval);
+  }, []);
 
   const recentActivities = [
     { time: "10 mins ago", action: "New user registered: john_doe" },
@@ -20,9 +71,8 @@ const AdminDashboard = () => {
 
   const quickActions = [
     { label: "Add New Model", icon: "➕", path: "/upload" },
-    { label: "View All Bookings", icon: "📋", path: "/bookings" },
+    { label: "View All Models", icon: "🖼️", path: "/models" },
     { label: "Manage Users", icon: "👥", path: "/users" },
-    { label: "Model Gallery", icon: "🖼️", path: "/models" },
   ];
 
   return (
@@ -48,12 +98,16 @@ const AdminDashboard = () => {
           >
             <div className="flex items-center justify-between mb-4">
               <span className="text-4xl">{stat.icon}</span>
-              <span className="text-green-400 text-sm font-semibold">
-                {stat.change}
-              </span>
+              {stat.change && (
+                <span className="text-gray-400 text-xs font-semibold">
+                  {stat.change}
+                </span>
+              )}
             </div>
             <h3 className="text-gray-400 text-sm mb-2">{stat.label}</h3>
-            <p className="text-3xl font-bold text-white">{stat.value}</p>
+            <p className="text-3xl font-bold text-white">
+              {isLoading ? "..." : stat.value}
+            </p>
           </div>
         ))}
       </div>
