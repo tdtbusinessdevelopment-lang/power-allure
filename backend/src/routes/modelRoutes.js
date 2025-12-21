@@ -5,6 +5,7 @@ import {
   getModelById,
   createLocalModel,
   createForeignModel,
+  updateModel,
   deleteModel
 } from "../controllers/modelController.js";
 
@@ -18,6 +19,9 @@ router.get("/:id", getModelById);
 // POST routes
 router.post("/local", createLocalModel);
 router.post("/foreign", createForeignModel);
+
+// PUT route
+router.put("/:id", updateModel);
 
 // DELETE route
 router.delete("/:id", deleteModel);

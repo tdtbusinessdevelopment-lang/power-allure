@@ -19,7 +19,12 @@ const uploadToCloudinary = async (base64Image) => {
 // Get all local models
 export const getLocalModels = async (req, res) => {
   try {
-    const models = await LocalModel.find();
+    // Check if filtering by availability is requested
+    const filter = {};
+    if (req.query.available === 'true') {
+      filter.available = true;
+    }
+    const models = await LocalModel.find(filter);
     res.json(models);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -29,7 +34,12 @@ export const getLocalModels = async (req, res) => {
 // Get all foreign models
 export const getForeignModels = async (req, res) => {
   try {
-    const models = await ForeignModel.find();
+    // Check if filtering by availability is requested
+    const filter = {};
+    if (req.query.available === 'true') {
+      filter.available = true;
+    }
+    const models = await ForeignModel.find(filter);
     res.json(models);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -135,6 +145,43 @@ export const createForeignModel = async (req, res) => {
     
     const model = await ForeignModel.create(modelData);
     res.status(201).json({ message: "Foreign model created!", model });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Update model by ID (searches both collections)
+export const updateModel = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updateData = req.body;
+
+    // Validate ObjectId
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ error: "Invalid model ID" });
+    }
+
+    // Try to update in LocalModel first
+    let updatedModel = await LocalModel.findByIdAndUpdate(
+      id,
+      updateData,
+      { new: true, runValidators: true }
+    );
+    
+    // If not found, try ForeignModel
+    if (!updatedModel) {
+      updatedModel = await ForeignModel.findByIdAndUpdate(
+        id,
+        updateData,
+        { new: true, runValidators: true }
+      );
+    }
+
+    if (!updatedModel) {
+      return res.status(404).json({ error: "Model not found" });
+    }
+
+    res.json({ message: "Model updated successfully", model: updatedModel });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
