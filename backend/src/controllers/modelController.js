@@ -22,7 +22,8 @@ export const getLocalModels = async (req, res) => {
     // Check if filtering by availability is requested
     const filter = {};
     if (req.query.available === 'true') {
-      filter.available = true;
+      // Show models where available is true OR undefined (for backward compatibility)
+      filter.$or = [{ available: true }, { available: { $exists: false } }];
     }
     const models = await LocalModel.find(filter);
     res.json(models);
@@ -37,7 +38,8 @@ export const getForeignModels = async (req, res) => {
     // Check if filtering by availability is requested
     const filter = {};
     if (req.query.available === 'true') {
-      filter.available = true;
+      // Show models where available is true OR undefined (for backward compatibility)
+      filter.$or = [{ available: true }, { available: { $exists: false } }];
     }
     const models = await ForeignModel.find(filter);
     res.json(models);
