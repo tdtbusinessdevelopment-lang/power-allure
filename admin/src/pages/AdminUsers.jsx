@@ -151,6 +151,30 @@ const AdminUsers = () => {
     );
   }
 
+  // Fetch model details for favorites
+  const [selectedModelDetails, setSelectedModelDetails] = useState(null);
+  const [modelLoading, setModelLoading] = useState(false);
+
+  const fetchModelDetails = async (modelId, category) => {
+    try {
+      setModelLoading(true);
+      const endpoint =
+        category?.toLowerCase() === "foreign" ? "foreign" : "local";
+
+      const response = await fetch(`${API_URL}/models/${endpoint}/${modelId}`);
+      if (response.ok) {
+        const data = await response.json();
+        setSelectedModelDetails(data);
+      } else {
+        console.error("Failed to fetch model details");
+      }
+    } catch (error) {
+      console.error("Error fetching model details:", error);
+    } finally {
+      setModelLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-black p-6 md:p-8 animate-fade-in">
       {/* Page Header */}
@@ -311,11 +335,11 @@ const AdminUsers = () => {
       {/* User Details Modal */}
       {selectedUser && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-6"
+          className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-6 animate-fade-in"
           onClick={() => setSelectedUser(null)}
         >
           <div
-            className="bg-black border rounded-3xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+            className="bg-black border rounded-3xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto animate-fade-in-up"
             style={{ borderColor: themeColor }}
             onClick={(e) => e.stopPropagation()}
           >
@@ -388,7 +412,10 @@ const AdminUsers = () => {
                     {selectedUser.favorites.map((favorite, index) => (
                       <span
                         key={index}
-                        className="px-3 py-1 rounded-full text-black text-sm font-semibold"
+                        onClick={() =>
+                          fetchModelDetails(favorite.modelId, favorite.category)
+                        }
+                        className="px-3 py-1 rounded-full text-black text-sm font-semibold cursor-pointer hover:opacity-80 transition-opacity"
                         style={{ backgroundColor: themeColor }}
                       >
                         {favorite.name}
@@ -430,11 +457,11 @@ const AdminUsers = () => {
       {/* Edit User Modal */}
       {editingUser && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-6"
+          className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-6 animate-fade-in"
           onClick={() => setEditingUser(null)}
         >
           <div
-            className="bg-black border rounded-3xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+            className="bg-black border rounded-3xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto animate-fade-in-up"
             style={{ borderColor: themeColor }}
             onClick={(e) => e.stopPropagation()}
           >
@@ -552,6 +579,134 @@ const AdminUsers = () => {
                 Cancel
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Model Details Modal for Favorites */}
+      {(selectedModelDetails || modelLoading) && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-6 animate-fade-in"
+          onClick={() => !modelLoading && setSelectedModelDetails(null)}
+        >
+          <div
+            className="bg-black border rounded-3xl p-8 max-w-lg w-full relative animate-fade-in-up"
+            style={{ borderColor: themeColor }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {modelLoading ? (
+              <div className="flex flex-col items-center justify-center py-10">
+                <div
+                  className="w-10 h-10 border-4 border-t-transparent rounded-full animate-spin mb-4"
+                  style={{
+                    borderColor: `${themeColor} transparent transparent transparent`,
+                  }}
+                ></div>
+                <p className="text-white">Loading model details...</p>
+              </div>
+            ) : (
+              <>
+                <button
+                  onClick={() => setSelectedModelDetails(null)}
+                  className="absolute top-4 right-4 text-white hover:text-red-500 text-2xl font-bold"
+                >
+                  ×
+                </button>
+                <div className="flex flex-col items-center mb-6">
+                  <div
+                    className="w-32 h-32 rounded-full overflow-hidden mb-4 border-2"
+                    style={{ borderColor: themeColor }}
+                  >
+                    <img
+                      src={selectedModelDetails.imageUrl}
+                      alt={selectedModelDetails.name}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <h3
+                    className="text-2xl font-bold"
+                    style={{ color: themeColor }}
+                  >
+                    {selectedModelDetails.name}
+                  </h3>
+                  <span className="text-gray-400 text-sm uppercase tracking-widest mt-1">
+                    {selectedModelDetails.location || "Model"}
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-gray-400 text-sm">Height</p>
+                    <p className="text-white">
+                      {selectedModelDetails.height || "N/A"}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-gray-400 text-sm">Bust</p>
+                    <p className="text-white">
+                      {selectedModelDetails.bust || "N/A"}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-gray-400 text-sm">Waist</p>
+                    <p className="text-white">
+                      {selectedModelDetails.waist || "N/A"}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-gray-400 text-sm">Hips</p>
+                    <p className="text-white">
+                      {selectedModelDetails.hips || "N/A"}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-gray-400 text-sm">Shoe Size</p>
+                    <p className="text-white">
+                      {selectedModelDetails.shoeSize || "N/A"}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-gray-400 text-sm">Availability</p>
+                    <p
+                      className={
+                        selectedModelDetails.available
+                          ? "text-green-500"
+                          : "text-red-500"
+                      }
+                    >
+                      {selectedModelDetails.available
+                        ? "Available"
+                        : "Unavailable"}
+                    </p>
+                  </div>
+                </div>
+
+                {selectedModelDetails.galleryImages &&
+                  selectedModelDetails.galleryImages.length > 0 && (
+                    <div className="mt-6">
+                      <p className="text-gray-400 text-sm mb-2">
+                        Gallery Preview
+                      </p>
+                      <div className="flex gap-2 overflow-x-auto pb-2">
+                        {selectedModelDetails.galleryImages
+                          .slice(0, 4)
+                          .map((img, idx) => (
+                            <div
+                              key={idx}
+                              className="w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden"
+                            >
+                              <img
+                                src={img}
+                                alt={`Gallery ${idx}`}
+                                className="w-full h-full object-cover"
+                              />
+                            </div>
+                          ))}
+                      </div>
+                    </div>
+                  )}
+              </>
+            )}
           </div>
         </div>
       )}

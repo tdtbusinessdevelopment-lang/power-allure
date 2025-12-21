@@ -68,7 +68,7 @@ export const createBooking = async (req, res) => {
 export const getAllBookings = async (req, res) => {
   try {
     const bookings = await Booking.find()
-      .populate("userId", "username email")
+      .populate("userId", "-password") // Populate all user fields except password
       .sort({ createdAt: -1 });
 
     res.status(200).json({

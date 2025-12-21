@@ -155,6 +155,45 @@ const AdminBookings = () => {
     );
   }
 
+  // Fetch model details when clicking model name
+  const [selectedModelDetails, setSelectedModelDetails] = useState(null);
+  const [selectedUserDetails, setSelectedUserDetails] = useState(null);
+  const [modelLoading, setModelLoading] = useState(false);
+
+  const fetchModelDetails = async (modelId, category) => {
+    try {
+      setModelLoading(true);
+      // Determine endpoint based on category
+      const endpoint =
+        category?.toLowerCase() === "foreign" ? "foreign" : "local";
+
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/models/${endpoint}/${modelId}`
+      );
+      if (response.ok) {
+        const data = await response.json();
+        setSelectedModelDetails(data);
+      } else {
+        console.error("Failed to fetch model details");
+        alert("Failed to fetch model details");
+      }
+    } catch (error) {
+      console.error("Error fetching model details:", error);
+    } finally {
+      setModelLoading(false);
+    }
+  };
+
+  const handleModelClick = (booking) => {
+    fetchModelDetails(booking.modelId, booking.modelCategory);
+  };
+
+  const handleUserClick = (user) => {
+    if (user) {
+      setSelectedUserDetails(user);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-black p-6 md:p-8 animate-fade-in">
       {/* Page Header */}
@@ -263,9 +302,19 @@ const AdminBookings = () => {
                     className="border-b border-gray-800 hover:bg-gray-900 hover:bg-opacity-30 transition-all"
                   >
                     <td className="p-4 text-white">#{booking._id.slice(-6)}</td>
-                    <td className="p-4 text-white">{booking.userName}</td>
+                    <td
+                      className="p-4 text-white cursor-pointer hover:underline"
+                      onClick={() => handleUserClick(booking.userId)}
+                    >
+                      {booking.userName}
+                    </td>
                     <td className="p-4 text-white">{booking.company}</td>
-                    <td className="p-4 text-white">{booking.modelName}</td>
+                    <td
+                      className="p-4 text-white cursor-pointer hover:underline"
+                      onClick={() => handleModelClick(booking)}
+                    >
+                      {booking.modelName}
+                    </td>
                     <td className="p-4 text-white capitalize">
                       {booking.modelCategory || "Local"}
                     </td>
@@ -336,6 +385,194 @@ const AdminBookings = () => {
 
         <BookingCalendar bookings={filteredBookings} themeColor={themeColor} />
       </div>
+
+      {/* User Details Modal */}
+      {selectedUserDetails && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-6 animate-fade-in"
+          onClick={() => setSelectedUserDetails(null)}
+        >
+          <div
+            className="bg-black border rounded-3xl p-8 max-w-md w-full relative animate-fade-in-up"
+            style={{ borderColor: themeColor }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setSelectedUserDetails(null)}
+              className="absolute top-4 right-4 text-white hover:text-red-500 text-2xl font-bold"
+            >
+              ×
+            </button>
+            <h3
+              className="text-2xl font-bold mb-6"
+              style={{ color: themeColor }}
+            >
+              Client Details
+            </h3>
+
+            <div className="space-y-4">
+              <div>
+                <p className="text-gray-400 text-sm">Full Name</p>
+                <p className="text-white text-lg font-semibold">
+                  {selectedUserDetails.firstName} {selectedUserDetails.lastName}
+                </p>
+              </div>
+              <div>
+                <p className="text-gray-400 text-sm">Username</p>
+                <p className="text-white text-lg">
+                  {selectedUserDetails.username}
+                </p>
+              </div>
+              <div>
+                <p className="text-gray-400 text-sm">Email</p>
+                <p className="text-white text-lg">
+                  {selectedUserDetails.email}
+                </p>
+              </div>
+              <div>
+                <p className="text-gray-400 text-sm">Phone Number</p>
+                <p className="text-white text-lg">
+                  {selectedUserDetails.phoneNumber || "N/A"}
+                </p>
+              </div>
+              <div>
+                <p className="text-gray-400 text-sm">Age</p>
+                <p className="text-white text-lg">
+                  {selectedUserDetails.age || "N/A"}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Model Details Modal */}
+      {(selectedModelDetails || modelLoading) && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-6 animate-fade-in"
+          onClick={() => !modelLoading && setSelectedModelDetails(null)}
+        >
+          <div
+            className="bg-black border rounded-3xl p-8 max-w-lg w-full relative animate-fade-in-up"
+            style={{ borderColor: themeColor }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {modelLoading ? (
+              <div className="flex flex-col items-center justify-center py-10">
+                <div
+                  className="w-10 h-10 border-4 border-t-transparent rounded-full animate-spin mb-4"
+                  style={{
+                    borderColor: `${themeColor} transparent transparent transparent`,
+                  }}
+                ></div>
+                <p className="text-white">Loading model details...</p>
+              </div>
+            ) : (
+              <>
+                <button
+                  onClick={() => setSelectedModelDetails(null)}
+                  className="absolute top-4 right-4 text-white hover:text-red-500 text-2xl font-bold"
+                >
+                  ×
+                </button>
+                <div className="flex flex-col items-center mb-6">
+                  <div
+                    className="w-32 h-32 rounded-full overflow-hidden mb-4 border-2"
+                    style={{ borderColor: themeColor }}
+                  >
+                    <img
+                      src={selectedModelDetails.imageUrl}
+                      alt={selectedModelDetails.name}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <h3
+                    className="text-2xl font-bold"
+                    style={{ color: themeColor }}
+                  >
+                    {selectedModelDetails.name}
+                  </h3>
+                  <span className="text-gray-400 text-sm uppercase tracking-widest mt-1">
+                    {selectedModelDetails.location || "Model"}
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-gray-400 text-sm">Height</p>
+                    <p className="text-white">
+                      {selectedModelDetails.height || "N/A"}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-gray-400 text-sm">Bust</p>
+                    <p className="text-white">
+                      {selectedModelDetails.bust || "N/A"}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-gray-400 text-sm">Waist</p>
+                    <p className="text-white">
+                      {selectedModelDetails.waist || "N/A"}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-gray-400 text-sm">Hips</p>
+                    <p className="text-white">
+                      {selectedModelDetails.hips || "N/A"}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-gray-400 text-sm">Shoe Size</p>
+                    <p className="text-white">
+                      {selectedModelDetails.shoeSize || "N/A"}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-gray-400 text-sm">Availability</p>
+                    <p
+                      className={
+                        selectedModelDetails.available
+                          ? "text-green-500"
+                          : "text-red-500"
+                      }
+                    >
+                      {selectedModelDetails.available
+                        ? "Available"
+                        : "Unavailable"}
+                    </p>
+                  </div>
+                </div>
+
+                {selectedModelDetails.galleryImages &&
+                  selectedModelDetails.galleryImages.length > 0 && (
+                    <div className="mt-6">
+                      <p className="text-gray-400 text-sm mb-2">
+                        Gallery Preview
+                      </p>
+                      <div className="flex gap-2 overflow-x-auto pb-2">
+                        {selectedModelDetails.galleryImages
+                          .slice(0, 4)
+                          .map((img, idx) => (
+                            <div
+                              key={idx}
+                              className="w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden"
+                            >
+                              <img
+                                src={img}
+                                alt={`Gallery ${idx}`}
+                                className="w-full h-full object-cover"
+                              />
+                            </div>
+                          ))}
+                      </div>
+                    </div>
+                  )}
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

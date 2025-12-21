@@ -96,9 +96,19 @@ export const getRecentActivity = async (req, res) => {
       }))
     ];
 
+    // Filter out activities that happened before the clear date
+    let filteredActivities = activities;
+    // Use req.adminData populated by authenticateAdmin middleware
+    if (req.adminData && req.adminData.activityClearedAt) {
+      const clearDate = new Date(req.adminData.activityClearedAt);
+      filteredActivities = activities.filter(
+        activity => activity.originalTime > clearDate
+      );
+    }
+
     // Sort combined activities by date (newest first) and take top 10
-    activities.sort((a, b) => b.originalTime - a.originalTime);
-    const topActivities = activities.slice(0, 10);
+    filteredActivities.sort((a, b) => b.originalTime - a.originalTime);
+    const topActivities = filteredActivities.slice(0, 10);
 
     // Format time for display (e.g., "10 mins ago")
     // Note: detailed formatting is better done on frontend, sending ISO string here
@@ -112,6 +122,36 @@ export const getRecentActivity = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Server error while fetching recent activity",
+    });
+  }
+};
+
+// Clear recent activity (update timestamp)
+export const clearActivity = async (req, res) => {
+  try {
+    // Get authenticated admin user
+    const adminUser = req.adminData; // From adminAuthMiddleware
+    
+    // Check key depending on middleware implementation
+    // Ideally request should have user attached
+    
+    if (!adminUser) {
+      return res.status(401).json({ success: false, message: "Unauthorized" });
+    }
+
+    // Update activityClearedAt to now
+    adminUser.activityClearedAt = Date.now();
+    await adminUser.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Activity feed cleared successfully"
+    });
+  } catch (error) {
+    console.error("Clear activity error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error while clearing activity"
     });
   }
 };

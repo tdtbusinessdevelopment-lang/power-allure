@@ -28,6 +28,10 @@ const adminUserSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  activityClearedAt: {
+    type: Date,
+    default: null,
+  },
 });
 
 const AdminUser = mongoose.model("AdminUser", adminUserSchema, "AdminUsers");
