@@ -330,7 +330,14 @@ const AboutPage = () => {
 
           {/* Book Now Button */}
           <button
-            onClick={() => navigate("/booking")}
+            onClick={() => {
+              const token = localStorage.getItem("token");
+              if (token) {
+                navigate("/booking");
+              } else {
+                navigate("/login");
+              }
+            }}
             className="mt-8 bg-white text-black px-10 py-3 rounded-full font-serif italic text-lg md:text-xl font-bold hover:bg-gray-200 transition-all duration-300 transform hover:scale-105 shadow-[0_0_15px_rgba(255,255,255,0.3)]"
           >
             Book now
