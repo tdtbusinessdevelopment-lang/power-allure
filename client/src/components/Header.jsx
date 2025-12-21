@@ -81,23 +81,33 @@ const Header = ({ activeTab, onTabChange }) => {
           </div>
 
           {/* Right Links */}
-          
+
           <nav className="flex items-center gap-5">
-             <span
-            onClick={() => handleTabClick("FAVORITES")}
-            className="cursor-pointer hover:text-white transition-colors text-2xl"
-            style={{ color: activeTab === "FAVORITES" ? "#dcb886" : "#d1d5db" }}
-          >
-            Favorites
-          </span>
+            <span
+              onClick={() => handleTabClick("FAVORITES")}
+              className="cursor-pointer hover:text-white transition-colors text-2xl"
+              style={{
+                color: activeTab === "FAVORITES" ? "#dcb886" : "#d1d5db",
+              }}
+            >
+              Favorites
+            </span>
+            <span
+              onClick={() => navigate("/booking")}
+              className="cursor-pointer hover:text-white transition-colors text-2xl"
+              style={{
+                color: location.pathname === "/booking" ? "#dcb886" : "#d1d5db",
+              }}
+            >
+              Booking
+            </span>
             <span
               onClick={() => navigate("/profile")}
-             className="cursor-pointer hover:text-white transition-colors text-2xl"
-            style={{ color: activeTab === "PROFILE" ? "#dcb886" : "#d1d5db" }}
-           >
+              className="cursor-pointer hover:text-white transition-colors text-2xl"
+              style={{ color: activeTab === "PROFILE" ? "#dcb886" : "#d1d5db" }}
+            >
               Profile
             </span>
-            
           </nav>
         </div>
       </div>

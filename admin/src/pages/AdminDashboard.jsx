@@ -36,9 +36,11 @@ const AdminDashboard = () => {
             },
             {
               label: "Total Bookings",
-              value: "—",
+              value: data.stats.totalBookings?.toString() || "0",
               icon: "📅",
-              change: "Coming Soon",
+              change: `Pending: ${
+                data.stats.pendingBookings || 0
+              } | Confirmed: ${data.stats.confirmedBookings || 0}`,
             },
             {
               label: "Active Models",

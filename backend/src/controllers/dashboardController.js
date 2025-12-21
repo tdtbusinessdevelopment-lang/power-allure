@@ -1,6 +1,7 @@
 import User from '../models/User.js';
 import LocalModel from '../models/LocalModel.js';
 import ForeignModel from '../models/ForeignModel.js';
+import Booking from '../models/Booking.js';
 
 // Get dashboard statistics
 export const getDashboardStats = async (req, res) => {
@@ -20,6 +21,11 @@ export const getDashboardStats = async (req, res) => {
     // Get active foreign models count (available = true)
     const activeForeignModels = await ForeignModel.countDocuments({ available: true });
     
+    // Get booking statistics
+    const totalBookings = await Booking.countDocuments();
+    const pendingBookings = await Booking.countDocuments({ status: 'pending' });
+    const confirmedBookings = await Booking.countDocuments({ status: 'confirmed' });
+    
     // Calculate totals
     const totalModels = totalLocalModels + totalForeignModels;
     const activeModels = activeLocalModels + activeForeignModels;
@@ -34,6 +40,9 @@ export const getDashboardStats = async (req, res) => {
         totalForeignModels,
         activeLocalModels,
         activeForeignModels,
+        totalBookings,
+        pendingBookings,
+        confirmedBookings,
       },
     });
   } catch (error) {

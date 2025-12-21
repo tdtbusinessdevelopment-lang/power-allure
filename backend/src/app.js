@@ -6,6 +6,7 @@ import modelRoutes from "./routes/modelRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import userRoutes from './routes/userRoutes.js';
 import dashboardRoutes from './routes/dashboardRoutes.js';
+import bookingRoutes from './routes/bookingRoutes.js';
 
 const app = express();
 
@@ -45,6 +46,7 @@ app.use("/models", modelRoutes);
 app.use("/auth", authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/bookings', bookingRoutes);
 
 
 app.get("/", (req, res) => {
