@@ -8,12 +8,15 @@ import {
   deleteBooking,
 } from "../controllers/bookingController.js";
 import { authenticateAdmin } from "../middleware/adminAuthMiddleware.js";
+import { authenticateToken } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-// All routes require authentication
-// All routes require authentication
-router.post("/", authenticateAdmin, createBooking);
+// Public/User Routes
+router.post("/", authenticateToken, createBooking);
+router.get("/my-bookings", authenticateToken, getUserBookings);
+
+// Admin Routes
 router.get("/", authenticateAdmin, getAllBookings);
 router.get("/user/:userId", authenticateAdmin, getUserBookings);
 router.get("/:id", authenticateAdmin, getBookingById);
