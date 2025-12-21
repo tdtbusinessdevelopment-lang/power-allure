@@ -15,11 +15,23 @@ export const addFavorite = async (req, res) => {
             category
         };
         
-        await User.findByIdAndUpdate(
+        // Add to user's favorites
+        const result = await User.findByIdAndUpdate(
             userId, 
             { $addToSet: { favorites: favoriteObject } },
             { new: true }
         );
+        
+        // Increment favoritesCount on the model (try both collections)
+        await LocalModel.findByIdAndUpdate(
+            modelId,
+            { $inc: { favoritesCount: 1 } }
+        ).catch(() => {});
+        
+        await ForeignModel.findByIdAndUpdate(
+            modelId,
+            { $inc: { favoritesCount: 1 } }
+        ).catch(() => {});
         
         res.status(200).json({ message: 'Model added to favorites' });
     } catch (error) {
@@ -30,11 +42,25 @@ export const addFavorite = async (req, res) => {
 export const removeFavorite = async (req, res) => {
     try {
         const { userId, modelId } = req.body;
+        
+        // Remove from user's favorites
         await User.findByIdAndUpdate(
             userId, 
             { $pull: { favorites: { modelId: modelId } } },
             { new: true }
         );
+        
+        // Decrement favoritesCount on the model (try both collections)
+        await LocalModel.findByIdAndUpdate(
+            modelId,
+            { $inc: { favoritesCount: -1 } }
+        ).catch(() => {});
+        
+        await ForeignModel.findByIdAndUpdate(
+            modelId,
+            { $inc: { favoritesCount: -1 } }
+        ).catch(() => {});
+        
         res.status(200).json({ message: 'Model removed from favorites' });
     } catch (error) {
         res.status(500).json({ message: error.message });

@@ -35,7 +35,9 @@ const MainPage = () => {
 
     try {
       const endpoint = category === "LOCAL" ? "local" : "foreign";
-      const response = await fetch(`${API_URL}/models/${endpoint}`);
+      const response = await fetch(
+        `${API_URL}/models/${endpoint}?available=true`
+      );
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
