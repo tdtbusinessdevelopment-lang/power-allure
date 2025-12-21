@@ -15,28 +15,46 @@ const AdminBookings = () => {
   const fetchBookings = async () => {
     try {
       setLoading(true);
+      setError(""); // Clear previous errors
       const token = localStorage.getItem("token");
+
+      if (!token) {
+        setError("Please log in to view bookings");
+        setLoading(false);
+        return;
+      }
 
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/api/bookings`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
           },
         }
       );
 
-      if (response.ok) {
-        const data = await response.json();
-        if (data.success) {
-          setBookings(data.bookings);
-        }
+      // Check if response is JSON
+      const contentType = response.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        const text = await response.text();
+        console.error("Non-JSON response:", text);
+        setError("Server error: Invalid response format");
+        setLoading(false);
+        return;
+      }
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        setBookings(data.bookings || []);
+        setError(""); // Clear any errors
       } else {
-        setError("Failed to fetch bookings");
+        setError(data.message || "Failed to fetch bookings");
       }
     } catch (err) {
       console.error("Error fetching bookings:", err);
-      setError("Error loading bookings");
+      setError(`Error loading bookings: ${err.message}`);
     } finally {
       setLoading(false);
     }

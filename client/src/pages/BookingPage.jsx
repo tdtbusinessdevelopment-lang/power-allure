@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Header from "../components/LandingHeader";
+import Header from "../components/Header";
 
 const BookingPage = () => {
   const themeColor = "#dcb887";
@@ -21,7 +21,7 @@ const BookingPage = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
 
-  // Fetch user's favorites on mount
+  // Fetch user's favorites and auto-fill name on mount
   useEffect(() => {
     const fetchFavorites = async () => {
       try {
@@ -31,6 +31,17 @@ const BookingPage = () => {
         if (!token || !userData._id) {
           setError("Please log in to make a booking");
           return;
+        }
+
+        // Auto-fill user's full name
+        const fullName = `${userData.firstName || ""} ${
+          userData.lastName || ""
+        }`.trim();
+        if (fullName) {
+          setFormData((prev) => ({
+            ...prev,
+            name: fullName,
+          }));
         }
 
         // Get favorites from localStorage user data

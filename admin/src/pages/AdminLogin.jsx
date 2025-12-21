@@ -6,17 +6,49 @@ const AdminLogin = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleLogin = () => {
-    // Placeholder login - no backend functionality yet
+  const handleLogin = async () => {
+    // Validate input
     if (!username || !password) {
       setError("Please enter both username and password");
       return;
     }
 
-    // For now, just navigate to dashboard
-    // TODO: Add actual authentication
-    navigate("/dashboard");
+    setLoading(true);
+    setError("");
+
+    try {
+      // Call the backend authentication API
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/auth/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ username, password }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        // Store token and user info in localStorage
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("user", JSON.stringify(data.user));
+
+        // Navigate to dashboard
+        navigate("/dashboard");
+      } else {
+        setError(data.message || "Invalid username or password");
+      }
+    } catch (err) {
+      console.error("Login error:", err);
+      setError("Server error. Please try again later.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -71,9 +103,10 @@ const AdminLogin = () => {
           </div>
           <button
             onClick={handleLogin}
-            className="mt-6 md:mt-8 px-10 md:px-12 py-3 md:py-4 text-lg md:text-xl rounded-full bg-[#c5c4c4] text-black font-semibold transition-colors hover:bg-[#b0afaf]"
+            disabled={loading}
+            className="mt-6 md:mt-8 px-10 md:px-12 py-3 md:py-4 text-lg md:text-xl rounded-full bg-[#c5c4c4] text-black font-semibold transition-colors hover:bg-[#b0afaf] disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Login
+            {loading ? "Logging in..." : "Login"}
           </button>
         </div>
       </div>
