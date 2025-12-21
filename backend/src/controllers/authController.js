@@ -64,6 +64,9 @@ export const login = async (req, res) => {
       user: {
         _id: user._id,
         username: user.username,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
         favorites: user.favorites,
       },
     });
@@ -78,18 +81,18 @@ export const login = async (req, res) => {
 
 export const register = async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const { username, password, firstName, lastName, email, phoneNumber, age } = req.body;
 
-    // Validate input
-    if (!username || !password) {
+    // Validate all required fields
+    if (!username || !password || !firstName || !lastName || !email || !phoneNumber || !age) {
       return res.status(400).json({
         success: false,
-        message: "Please provide both username and password",
+        message: "Please provide all required fields",
       });
     }
 
-    // Input sanitization - limit length and check for dangerous characters
-    if (username.length > 50 || password.length > 100) {
+    // Input sanitization - limit length
+    if (username.length > 50 || password.length > 100 || firstName.length > 50 || lastName.length > 50 || email.length > 100 || phoneNumber.length > 20) {
       return res.status(400).json({
         success: false,
         message: "Invalid input length",
@@ -114,12 +117,48 @@ export const register = async (req, res) => {
       });
     }
 
-    // Check if user already exists
+    // Email validation
+    const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({
+        success: false,
+        message: "Please provide a valid email address",
+      });
+    }
+
+    // Age validation
+    const ageNum = parseInt(age);
+    if (isNaN(ageNum) || ageNum < 18 || ageNum > 120) {
+      return res.status(400).json({
+        success: false,
+        message: "Age must be between 18 and 120",
+      });
+    }
+
+    // Phone number validation - basic check
+    const phoneRegex = /^[\d\s\-\+\(\)]+$/;
+    if (!phoneRegex.test(phoneNumber)) {
+      return res.status(400).json({
+        success: false,
+        message: "Please provide a valid phone number",
+      });
+    }
+
+    // Check if username already exists
     const existingUser = await User.findOne({ username: sanitizedUsername });
     if (existingUser) {
       return res.status(400).json({
         success: false,
         message: "Username already exists",
+      });
+    }
+
+    // Check if email already exists
+    const existingEmail = await User.findOne({ email: email.toLowerCase() });
+    if (existingEmail) {
+      return res.status(400).json({
+        success: false,
+        message: "Email already exists",
       });
     }
 
@@ -131,6 +170,11 @@ export const register = async (req, res) => {
     const newUser = new User({
       username: sanitizedUsername,
       password: hashedPassword,
+      firstName: firstName.trim(),
+      lastName: lastName.trim(),
+      email: email.toLowerCase().trim(),
+      phoneNumber: phoneNumber.trim(),
+      age: ageNum,
     });
 
     // Save the user to the database
@@ -142,6 +186,16 @@ export const register = async (req, res) => {
     });
   } catch (error) {
     console.error("Registration error:", error);
+    
+    // Handle duplicate key errors
+    if (error.code === 11000) {
+      const field = Object.keys(error.keyPattern)[0];
+      return res.status(400).json({
+        success: false,
+        message: `${field.charAt(0).toUpperCase() + field.slice(1)} already exists`,
+      });
+    }
+    
     res.status(500).json({
       success: false,
       message: "Server error during registration",
