@@ -19,9 +19,9 @@ const AdminLogin = () => {
     setError("");
 
     try {
-      // Call the backend authentication API
+      // Call the backend admin authentication API
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/auth/login`,
+        `${import.meta.env.VITE_API_URL}/admin/auth/login`,
         {
           method: "POST",
           headers: {

@@ -7,6 +7,7 @@ import authRoutes from "./routes/authRoutes.js";
 import userRoutes from './routes/userRoutes.js';
 import dashboardRoutes from './routes/dashboardRoutes.js';
 import bookingRoutes from './routes/bookingRoutes.js';
+import adminAuthRoutes from './routes/adminAuthRoutes.js';
 
 const app = express();
 
@@ -47,6 +48,7 @@ app.use("/auth", authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/bookings', bookingRoutes);
+app.use('/admin/auth', adminAuthRoutes);
 
 
 app.get("/", (req, res) => {

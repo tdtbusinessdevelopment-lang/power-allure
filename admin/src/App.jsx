@@ -17,15 +17,25 @@ import AdminUpload from "./pages/AdminUpload";
 // Import layout
 import AdminLayout from "./components/layout/AdminLayout";
 
+// Import protected route
+import ProtectedRoute from "./components/ProtectedRoute";
+
 function App() {
   return (
     <Router>
       <Routes>
-        {/* Login route (no layout) */}
+        {/* Login route (no layout, not protected) */}
         <Route path="/login" element={<AdminLogin />} />
 
-        {/* Admin routes (with layout) */}
-        <Route path="/" element={<AdminLayout />}>
+        {/* Admin routes (with layout and protection) */}
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <AdminLayout />
+            </ProtectedRoute>
+          }
+        >
           <Route index element={<Navigate to="/dashboard" replace />} />
           <Route path="dashboard" element={<AdminDashboard />} />
           <Route path="users" element={<AdminUsers />} />
