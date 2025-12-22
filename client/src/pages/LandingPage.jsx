@@ -82,27 +82,7 @@ const LandingPage = () => {
             <div className="absolute inset-0 bg-white transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
           </button>
 
-          {/* Scroll Indicator */}
-          <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
-            <div className="flex flex-col items-center gap-2 opacity-60">
-              <span className="text-gold text-xs font-light tracking-widest">
-                SCROLL
-              </span>
-              <svg
-                className="w-6 h-6 text-gold"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={1.5}
-                  d="M19 9l-7 7-7-7"
-                />
-              </svg>
-            </div>
-          </div>
+          
         </div>
 
         {/* Decorative Elements */}

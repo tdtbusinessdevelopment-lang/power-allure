@@ -20,43 +20,7 @@ const Footer = () => {
 
           {/* Quick Links Column */}
           <div className="md:text-center">
-            <h3 className="font-serif text-2xl font-bold text-gold mb-5">
-              Quick Links
-            </h3>
-            <ul className="space-y-3">
-              <li>
-                <Link
-                  to="/about"
-                  className="text-gray-300 hover:text-gold transition-colors duration-300 text-base"
-                >
-                  About Us
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/main"
-                  className="text-gray-300 hover:text-gold transition-colors duration-300 text-base"
-                >
-                  Our Models
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/booking"
-                  className="text-gray-300 hover:text-gold transition-colors duration-300 text-base"
-                >
-                  Book Now
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/login"
-                  className="text-gray-300 hover:text-gold transition-colors duration-300 text-base"
-                >
-                  Login
-                </Link>
-              </li>
-            </ul>
+            
           </div>
 
           {/* Contact Column */}

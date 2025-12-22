@@ -2,6 +2,11 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LandingHeader from "../components/LandingHeader";
 import heroVideo from "../assets/About.mp4";
+import ourModel from "../assets/ourmodel.jpg";
+import ourModel1 from "../assets/ourmodel1.jpg";
+import why from "../assets/why.jpg";
+import why1 from "../assets/why1.jpg";
+import why2 from "../assets/why2.jpg";
 import Footer from "../components/Footer";
 
 const AboutPage = () => {
@@ -15,20 +20,17 @@ const AboutPage = () => {
     {
       title: "Trained, professional talent",
       text: "At POWER ALLURE, we take pride in offering trained, professional talent who understand the demands of the industry. Our models are prepared, disciplined, and capable of meeting the highest standards.",
-      image:
-        "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=300&h=300&auto=format&fit=crop",
+      image: why,
     },
     {
       title: "VIP-ready and experienced",
       text: "At POWER ALLURE, VIP-ready and experienced. Trained to handle exclusive gatherings, prestigious functions, and high-end clientele with confidence and grace.",
-      image:
-        "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=300&h=300&auto=format&fit=crop",
+      image: why1,
     },
     {
       title: "Discreet and reliable",
       text: "At POWER ALLURE, your event and brand are handled with the utmost professionalism. We maintain strict confidentiality and ensure our models arrive prepared, punctual, and dependable for every engagement.",
-      image:
-        "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=300&h=300&auto=format&fit=crop",
+      image: why2,
     },
   ];
 
@@ -134,15 +136,15 @@ const AboutPage = () => {
           <div className="w-full lg:w-1/2 relative min-h-[500px] md:min-h-[600px]">
             <div className="absolute top-0 left-0 w-[65%] h-[60%] z-10 rounded-2xl overflow-hidden shadow-elegant">
               <img
-                src="https://images.unsplash.com/photo-1569388330292-79cc1ec67270?q=80&w=400&h=500&auto=format&fit=crop"
-                alt="Model in evening wear"
+                src={ourModel}
+                alt="Power Allure Model"
                 className="w-full h-full object-cover"
               />
             </div>
             <div className="absolute bottom-0 right-0 w-[65%] h-[55%] z-20 rounded-2xl overflow-hidden shadow-elegant">
               <img
-                src="https://images.unsplash.com/photo-1596436889106-118933572301?q=80&w=400&h=400&auto=format&fit=crop"
-                alt="Model poolside"
+                src={ourModel1}
+                alt="Power Allure Model"
                 className="w-full h-full object-cover"
               />
             </div>
