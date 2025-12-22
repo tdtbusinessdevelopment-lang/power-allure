@@ -3,6 +3,10 @@ import { useNavigate } from "react-router-dom";
 import LandingHeader from "../components/LandingHeader";
 import heroVideo from "../assets/About.mp4";
 import Footer from "../components/Footer";
+import ourmodel1 from "../assets/ourmodel1.jpg";
+import why1 from "../assets/why1.jpg";
+import why2 from "../assets/why2.jpg";
+import why3 from "../assets/why3.jpg";
 
 const AboutPage = () => {
   const navigate = useNavigate();
@@ -19,29 +23,25 @@ const AboutPage = () => {
     {
       title: "Trained, professional talent",
       text: "At POWER ALLURE, we take pride in offering trained, professional talent who understand the demands of the industry. Our models are prepared, disciplined, and capable of meeting the highest standards.",
-      image:
-        "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=300&h=300&auto=format&fit=crop",
+      image: why1,
       theme: "dark",
     },
     {
       title: "VIP-ready and experienced",
       text: "At POWER ALLURE, VIP-ready and experienced. Trained to handle exclusive gatherings, prestigious functions, and high-end clientele with confidence and grace.",
-      image:
-        "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=300&h=300&auto=format&fit=crop",
+      image: why2,
       theme: "gold",
     },
     {
       title: "Flexible and customized services",
       text: "At POWER ALLURE, we understand that every client and event is different. That's why we provide personalized arrangements, ensuring the perfect fit for your brand, theme, or occasion.",
-      image:
-        "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=300&h=300&auto=format&fit=crop",
+      image: why3,
       theme: "dark",
     },
     {
       title: "Discreet and reliable",
       text: "At POWER ALLURE, your event and brand are handled with the utmost professionalism. We maintain strict confidentiality and ensure our models arrive prepared, punctual, and dependable for every engagement.",
-      image:
-        "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=300&h=300&auto=format&fit=crop",
+      image: why1,
       theme: "gold",
     },
   ];
@@ -152,14 +152,14 @@ const AboutPage = () => {
           <div className="w-full lg:w-1/2 relative min-h-[500px] md:min-h-[600px]">
             <div className="absolute top-0 right-0 w-[65%] h-[60%] z-10">
               <img
-                src="https://images.unsplash.com/photo-1569388330292-79cc1ec67270?q=80&w=400&h=500&auto=format&fit=crop"
+                src={ourmodel1}
                 alt="Model in evening wear"
                 className="w-full h-full object-cover rounded-2xl grayscale-[10%]"
               />
             </div>
             <div className="absolute bottom-0 left-0 w-[65%] h-[55%] z-20">
               <img
-                src="https://images.unsplash.com/photo-1596436889106-118933572301?q=80&w=400&h=400&auto=format&fit=crop"
+                src={ourmodel1}
                 alt="Model poolside"
                 className="w-full h-full object-cover rounded-2xl grayscale-[10%]"
               />
@@ -330,14 +330,7 @@ const AboutPage = () => {
 
           {/* Book Now Button */}
           <button
-            onClick={() => {
-              const token = localStorage.getItem("token");
-              if (token) {
-                navigate("/booking");
-              } else {
-                navigate("/login");
-              }
-            }}
+            onClick={() => navigate("/login")}
             className="mt-8 bg-white text-black px-10 py-3 rounded-full font-serif italic text-lg md:text-xl font-bold hover:bg-gray-200 transition-all duration-300 transform hover:scale-105 shadow-[0_0_15px_rgba(255,255,255,0.3)]"
           >
             Book now
