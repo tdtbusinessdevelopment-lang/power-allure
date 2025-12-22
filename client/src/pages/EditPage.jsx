@@ -1,110 +1,123 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Header from "../components/Header";
 import Footer from "../components/Footer";
 
 const EditPage = () => {
-  // State to handle the toggle between the "Hi Mark" view and "Edit" view
-  const [isEditing, setIsEditing] = useState(true);
   const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    setError("");
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // TODO: Implement actual update logic
+    setLoading(true);
+    setError("");
+    setSuccess(false);
+
+    // Mock submission
+    setTimeout(() => {
+      setSuccess(true);
+      setLoading(false);
+    }, 1500);
+  };
 
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col font-sans">
-      {/* Header Brand */}
-      <header className="w-full py-8 text-center">
-        <h1 className="text-[#C5A27D] text-2xl font-semibold tracking-widest uppercase">
-          Power Allure
-        </h1>
-      </header>
+    <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black text-white font-sans">
+      <Header activeTab="PROFILE" />
 
-      {/* Main Content */}
-      <main className="flex-grow flex flex-col lg:flex-row items-center justify-center px-4 md:px-6 lg:px-32 gap-8 md:gap-12 lg:gap-24">
-        {/* Left Side: Navigation & Form */}
-        <div className="flex-1 flex flex-col items-center lg:items-start w-full max-w-md">
-          {/* Top Toggle Buttons */}
-          <div className="flex flex-col md:flex-row items-center mb-6 md:mb-8 gap-3 md:gap-0">
-            <button
-              onClick={() => setIsEditing(true)}
-              className={`${
-                isEditing
-                  ? "bg-[#D9B992] text-black"
-                  : "bg-[#3A3A3A] text-[#C5A27D]"
-              } px-6 py-2 rounded-full text-sm font-bold transition-all`}
-            >
-              Edit Profile
-            </button>
-            <div className="hidden md:block w-6 h-[1px] bg-[#3A3A3A]"></div>
-            <button
-              onClick={() => navigate("/main")}
-              className="bg-[#3A3A3A] hover:bg-[#4A4A4A] text-[#C5A27D] px-8 py-2 rounded-full text-sm font-medium transition-all"
-            >
-              Home
-            </button>
+      <main className="flex items-center justify-center min-h-[calc(100vh-160px)] p-4 md:p-8 animate-fade-in">
+        <div className="w-full max-w-5xl bg-charcoal rounded-3xl border border-gold/20 shadow-elegant p-8 md:p-12 flex flex-col lg:flex-row gap-12 items-center">
+          {/* Left Side - Text Content */}
+          <div className="w-full lg:w-1/2 space-y-6 text-center lg:text-left">
+            <h2 className="font-serif text-5xl md:text-6xl font-bold leading-tight bg-gradient-to-r from-gold-light via-gold to-gold-dark bg-clip-text text-transparent">
+              Update Profile
+            </h2>
+            <p className="text-gray-300 text-lg leading-relaxed">
+              Keep your account details up to date. Changes saved here will be
+              reflected across your profile.
+            </p>
           </div>
 
-          {/* Edit Form Card */}
-          <div className="bg-[#D9B992] rounded-[30px] p-6 md:p-10 w-full text-black shadow-xl">
-            <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
-              <div className="space-y-2">
-                <label className="block font-bold text-sm ml-1">
-                  Edit Name
-                </label>
-                <input
-                  type="text"
-                  placeholder="Edit Name"
-                  className="w-full bg-[#C5A27D] border-none rounded-2xl p-4 placeholder:text-black/30 focus:ring-2 focus:ring-black/20 outline-none transition-all"
-                />
-              </div>
+          {/* Right Side - Form */}
+          <div className="w-full lg:w-1/2">
+            <div className="bg-gold rounded-3xl p-8 shadow-lg">
+              {success && (
+                <div className="mb-4 p-3 bg-green-500 text-white rounded-lg text-center">
+                  ✓ Profile updated successfully!
+                </div>
+              )}
+              {error && (
+                <div className="mb-4 p-3 bg-red-500 text-white rounded-lg text-center">
+                  {error}
+                </div>
+              )}
 
-              <div className="space-y-2">
-                <label className="block font-bold text-sm ml-1">
-                  Update Email
-                </label>
-                <input
-                  type="email"
-                  placeholder="Update Email"
-                  className="w-full bg-[#C5A27D] border-none rounded-2xl p-4 placeholder:text-black/30 focus:ring-2 focus:ring-black/20 outline-none transition-all"
-                />
-              </div>
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div>
+                  <label className="block text-sm font-bold text-black/70 mb-2 ml-4">
+                    Full Name
+                  </label>
+                  <input
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    placeholder="Enter your full name"
+                    className="w-full px-4 py-3 rounded-full bg-gold-dark border-none focus:outline-none focus:ring-2 focus:ring-charcoal/50 text-black placeholder-black/60"
+                  />
+                </div>
 
-              <div className="space-y-2">
-                <label className="block font-bold text-sm ml-1">
-                  Update Password
-                </label>
-                <input
-                  type="password"
-                  placeholder="Update Password"
-                  className="w-full bg-[#C5A27D] border-none rounded-2xl p-4 placeholder:text-black/30 focus:ring-2 focus:ring-black/20 outline-none transition-all"
-                />
-              </div>
+                <div>
+                  <label className="block text-sm font-bold text-black/70 mb-2 ml-4">
+                    Email Address
+                  </label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    placeholder="Enter your email"
+                    className="w-full px-4 py-3 rounded-full bg-gold-dark border-none focus:outline-none focus:ring-2 focus:ring-charcoal/50 text-black placeholder-black/60"
+                  />
+                </div>
 
-              <div className="flex justify-center pt-4">
-                <button
-                  type="submit"
-                  className="bg-black text-white px-8 py-2 rounded-full text-sm font-bold hover:scale-105 active:scale-95 transition-transform"
-                >
-                  Save changes
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
+                <div>
+                  <label className="block text-sm font-bold text-black/70 mb-2 ml-4">
+                    New Password
+                  </label>
+                  <input
+                    type="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleInputChange}
+                    placeholder="Enter a new password (optional)"
+                    className="w-full px-4 py-3 rounded-full bg-gold-dark border-none focus:outline-none focus:ring-2 focus:ring-charcoal/50 text-black placeholder-black/60"
+                  />
+                </div>
 
-        {/* Right Side: Profile Image */}
-        <div className="flex-1 flex justify-center items-center">
-          <div className="relative w-64 h-64 md:w-80 md:h-80 lg:w-[500px] lg:h-[500px] rounded-full border-[4px] border-[#C5A27D] overflow-hidden shadow-2xl">
-            <img
-              src="/mark-profile.jpg" // Your image source
-              alt="Profile"
-              className="w-full h-full object-cover"
-            />
-            {/* Overlay */}
-            <div className="absolute bottom-0 w-full h-1/3 bg-gradient-to-t from-black/70 to-transparent flex flex-col items-center justify-end pb-8 md:pb-12">
-              <p className="text-lg md:text-xl lg:text-3xl font-bold text-white tracking-tighter">
-                TDT <span className="text-[#C5A27D]">POWER</span>STEEL
-              </p>
-              <p className="text-[10px] md:text-xs text-gray-400 tracking-[0.4em] uppercase font-light">
-                The No. 1 Steel Supplier
-              </p>
+                <div className="flex justify-center pt-4">
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="bg-charcoal text-white px-10 py-3 rounded-full font-semibold hover:bg-warm-gray transition-colors duration-300 shadow-md disabled:opacity-50"
+                  >
+                    {loading ? "Saving..." : "Save Changes"}
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         </div>

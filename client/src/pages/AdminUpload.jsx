@@ -123,7 +123,7 @@ const AdminUpload = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center p-6">
+    <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black flex items-center justify-center p-6">
       <form
         onSubmit={handleUpload}
         className="w-full max-w-lg border p-8 rounded-3xl"
@@ -275,11 +275,11 @@ const AdminUpload = () => {
       {/* Manage Models Modal */}
       {showManageModal && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-6"
+          className="fixed inset-0 bg-gradient-to-br from-black via-gray-900 to-black bg-opacity-95 flex items-center justify-center z-50 p-6"
           onClick={() => setShowManageModal(false)}
         >
           <div
-            className="bg-black border rounded-3xl p-8 max-w-2xl w-full max-h-[80vh] overflow-y-auto"
+            className="bg-gradient-to-br from-gray-900 to-black border rounded-3xl p-8 max-w-2xl w-full max-h-[80vh] overflow-y-auto"
             style={{ borderColor: themeColor }}
             onClick={(e) => e.stopPropagation()}
           >

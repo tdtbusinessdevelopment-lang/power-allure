@@ -2,40 +2,42 @@ import React from "react";
 import { NavLink, Link } from "react-router-dom";
 
 const LandingHeader = () => {
-  // Common text color style to reuse
-  const themeBg = "bg-[#deb887]";
+  const navLinkClasses = ({ isActive }) =>
+    `relative text-sm font-semibold uppercase tracking-widest px-4 py-2 rounded-full transition-colors duration-300 group ${
+      isActive ? "text-gold" : "text-white hover:text-gold"
+    }`;
 
   return (
-    <header className="sticky top-0 z-50 bg-black p-6 flex justify-between items-center">
-      <nav className="flex items-center space-x-8 text-sm font-medium">
-        <NavLink
-          to="/"
-          className={({ isActive }) =>
-            `px-4 py-2 rounded-full font-bold transition-colors ${
-              isActive
-                ? `${themeBg} text-black`
-                : "text-white hover:text-opacity-80"
-            }`
-          }
-        >
-          HOME
+    <header className="absolute top-0 z-50 w-full p-6 flex justify-between items-center bg-black bg-opacity-20 backdrop-blur-sm">
+      <nav className="flex items-center space-x-6">
+        <NavLink to="/" className={navLinkClasses}>
+          {({ isActive }) => (
+            <>
+              HOME
+              <span
+                className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 h-0.5 bg-gold transition-all duration-300 ${
+                  isActive ? "w-1/2" : "w-0 group-hover:w-1/2"
+                }`}
+              ></span>
+            </>
+          )}
         </NavLink>
-        <NavLink
-          to="/about"
-          className={({ isActive }) =>
-            `px-4 py-2 rounded-full font-bold transition-colors ${
-              isActive
-                ? `${themeBg} text-black`
-                : "text-white hover:text-opacity-80"
-            }`
-          }
-        >
-          ABOUT US
+        <NavLink to="/about" className={navLinkClasses}>
+          {({ isActive }) => (
+            <>
+              ABOUT US
+              <span
+                className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 h-0.5 bg-gold transition-all duration-300 ${
+                  isActive ? "w-1/2" : "w-0 group-hover:w-1/2"
+                }`}
+              ></span>
+            </>
+          )}
         </NavLink>
       </nav>
       <Link
         to="/login"
-        className="px-4 py-2 rounded-full font-bold text-white hover:text-[#deb887] transition-colors"
+        className="px-6 py-2 rounded-full font-semibold text-sm text-white border border-white/30 hover:bg-gold hover:text-black hover:border-gold transition-all duration-300"
       >
         Login
       </Link>

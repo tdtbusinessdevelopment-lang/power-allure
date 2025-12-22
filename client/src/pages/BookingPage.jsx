@@ -159,7 +159,7 @@ const BookingPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black text-white">
       {/* Header */}
       <Header activeTab={activeTab} onTabChange={setActiveTab} />
 
@@ -170,28 +170,28 @@ const BookingPage = () => {
           style={{ backgroundColor: "#4e4847" }}
         >
           {/* Left Side - Text Content */}
-          <div className="w-full lg:w-1/2 space-y-4 md:space-y-6">
+          <div className="w-full lg:w-1/2 space-y-6 md:space-y-8">
             <p
-              className="text-xs md:text-sm uppercase tracking-wider italic"
+              className="text-xs md:text-sm uppercase tracking-[0.2em] font-semibold"
               style={{ color: themeColor }}
             >
               WE'RE HERE TO ELEVATE YOUR EXPERIENCE
             </p>
 
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold">
-              <span className="italic" style={{ color: themeColor }}>
+            <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
+              <span className="italic bg-gradient-to-r from-gold-light to-gold bg-clip-text text-transparent">
                 Discuss
               </span>{" "}
               <span className="text-white">Your Needs.</span>
             </h2>
 
-            <p className="text-gray-300 text-base md:text-lg leading-relaxed italic">
+            <p className="text-gray-300 text-base md:text-lg leading-relaxed">
               Looking for professional PR models tailored to your brand, event,
               or campaign?
             </p>
 
             <p
-              className="text-base md:text-lg leading-relaxed italic"
+              className="text-base md:text-lg leading-relaxed font-light"
               style={{ color: themeColor }}
             >
               Reach out to Power Allure and let us deliver elegance, discretion,

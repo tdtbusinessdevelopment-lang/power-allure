@@ -90,10 +90,10 @@ const LoginPage = () => {
         }`}
         style={{ clipPath: "polygon(0 0, 100% 0, 60% 100%, 0 100%)" }}
       >
-        <h1 className="text-[#D8AF7F] text-[50px] md:text-[70px] font-bold mb-4 leading-tight px-4 md:px-0">
-          Power Allure
+        <h1 className="font-serif text-[70px] md:text-[90px] font-bold mb-4 leading-tight px-4 md:px-0 bg-gradient-to-r from-gold-light to-gold bg-clip-text text-transparent">
+          POWER ALLURE
         </h1>
-        <p className="text-[#D8AF7F] text-xl md:text-2xl px-4 md:px-0">
+        <p className="text-gold text-xl md:text-2xl font-light tracking-wide px-4 md:px-0">
           Feel the power. Own the allure.
         </p>
       </div>
@@ -108,7 +108,7 @@ const LoginPage = () => {
               : "opacity-0 translate-x-10"
           }`}
         >
-          <h2 className="text-black text-3xl md:text-5xl font-bold mb-6 md:mb-8">
+          <h2 className="font-serif text-5xl md:text-6xl font-bold mb-6 md:mb-8 text-black">
             Login
           </h2>
           <div className="w-full max-w-sm md:w-96 flex flex-col gap-4">
@@ -117,7 +117,7 @@ const LoginPage = () => {
               placeholder="Enter username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="w-full p-4 md:p-5 rounded-xl bg-[#c5c4c4] placeholder-gray-600 text-black text-base md:text-lg focus:outline-none"
+              className="w-full p-4 md:p-5 rounded-xl bg-[#c5c4c4] placeholder-gray-600 text-black text-base md:text-lg focus:outline-none focus:ring-2 focus:ring-black transition-all"
             />
             <input
               type="password"
@@ -129,10 +129,10 @@ const LoginPage = () => {
                   handleLogin();
                 }
               }}
-              className="w-full p-4 md:p-5 rounded-xl bg-[#c5c4c4] placeholder-gray-600 text-black text-base md:text-lg focus:outline-none"
+              className="w-full p-4 md:p-5 rounded-xl bg-[#c5c4c4] placeholder-gray-600 text-black text-base md:text-lg focus:outline-none focus:ring-2 focus:ring-black transition-all"
             />
             {error && (
-              <div className="text-red-600 text-sm font-semibold text-center bg-red-100 p-3 rounded-lg">
+              <div className="text-red-600 text-sm font-semibold text-center bg-red-100 p-3 rounded-lg border border-red-300">
                 {error}
               </div>
             )}
@@ -140,8 +140,8 @@ const LoginPage = () => {
           <button
             onClick={handleLogin}
             disabled={isLoading}
-            className={`mt-6 md:mt-8 px-10 md:px-12 py-3 md:py-4 text-lg md:text-xl rounded-full bg-[#c5c4c4] text-black font-semibold transition-colors ${
-              isLoading ? "opacity-50 cursor-not-allowed" : "hover:bg-[#b0afaf]"
+            className={`mt-6 md:mt-8 px-10 md:px-12 py-3 md:py-4 text-lg md:text-xl rounded-full bg-black text-gold font-semibold transition-all hover:scale-105 ${
+              isLoading ? "opacity-50 cursor-not-allowed" : "hover:shadow-gold"
             }`}
           >
             {isLoading ? "Logging in..." : "Login"}

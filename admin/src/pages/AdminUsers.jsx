@@ -4,6 +4,29 @@ import API_URL from "../config/api";
 const AdminUsers = () => {
   const themeColor = "#d6b48e";
 
+  // Fetch model details for favorites
+  const [selectedModelDetails, setSelectedModelDetails] = useState(null);
+  const [modelLoading, setModelLoading] = useState(false);
+
+  const fetchModelDetails = async (modelId, category) => {
+    try {
+      setModelLoading(true);
+      // NOTE: The backend handles searching both local and foreign collections via /models/:id
+      const response = await fetch(`${API_URL}/models/${modelId}`);
+
+      if (response.ok) {
+        const data = await response.json();
+        setSelectedModelDetails(data);
+      } else {
+        console.error("Failed to fetch model details");
+      }
+    } catch (error) {
+      console.error("Error fetching model details:", error);
+    } finally {
+      setModelLoading(false);
+    }
+  };
+
   // State management
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
@@ -150,30 +173,6 @@ const AdminUsers = () => {
       </div>
     );
   }
-
-  // Fetch model details for favorites
-  const [selectedModelDetails, setSelectedModelDetails] = useState(null);
-  const [modelLoading, setModelLoading] = useState(false);
-
-  const fetchModelDetails = async (modelId, category) => {
-    try {
-      setModelLoading(true);
-      const endpoint =
-        category?.toLowerCase() === "foreign" ? "foreign" : "local";
-
-      const response = await fetch(`${API_URL}/models/${endpoint}/${modelId}`);
-      if (response.ok) {
-        const data = await response.json();
-        setSelectedModelDetails(data);
-      } else {
-        console.error("Failed to fetch model details");
-      }
-    } catch (error) {
-      console.error("Error fetching model details:", error);
-    } finally {
-      setModelLoading(false);
-    }
-  };
 
   return (
     <div className="min-h-screen bg-black p-6 md:p-8 animate-fade-in">
@@ -634,35 +633,11 @@ const AdminUsers = () => {
                   </span>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-4 text-center">
                   <div>
-                    <p className="text-gray-400 text-sm">Height</p>
+                    <p className="text-gray-400 text-sm">Category</p>
                     <p className="text-white">
-                      {selectedModelDetails.height || "N/A"}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-gray-400 text-sm">Bust</p>
-                    <p className="text-white">
-                      {selectedModelDetails.bust || "N/A"}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-gray-400 text-sm">Waist</p>
-                    <p className="text-white">
-                      {selectedModelDetails.waist || "N/A"}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-gray-400 text-sm">Hips</p>
-                    <p className="text-white">
-                      {selectedModelDetails.hips || "N/A"}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-gray-400 text-sm">Shoe Size</p>
-                    <p className="text-white">
-                      {selectedModelDetails.shoeSize || "N/A"}
+                      {selectedModelDetails.category || "N/A"}
                     </p>
                   </div>
                   <div>
@@ -680,31 +655,6 @@ const AdminUsers = () => {
                     </p>
                   </div>
                 </div>
-
-                {selectedModelDetails.galleryImages &&
-                  selectedModelDetails.galleryImages.length > 0 && (
-                    <div className="mt-6">
-                      <p className="text-gray-400 text-sm mb-2">
-                        Gallery Preview
-                      </p>
-                      <div className="flex gap-2 overflow-x-auto pb-2">
-                        {selectedModelDetails.galleryImages
-                          .slice(0, 4)
-                          .map((img, idx) => (
-                            <div
-                              key={idx}
-                              className="w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden"
-                            >
-                              <img
-                                src={img}
-                                alt={`Gallery ${idx}`}
-                                className="w-full h-full object-cover"
-                              />
-                            </div>
-                          ))}
-                      </div>
-                    </div>
-                  )}
               </>
             )}
           </div>

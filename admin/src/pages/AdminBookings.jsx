@@ -3,7 +3,47 @@ import BookingCalendar from "../components/BookingCalendar";
 
 const AdminBookings = () => {
   const themeColor = "#d6b48e";
+  // Fetch model details when clicking model name
+  const [selectedModelDetails, setSelectedModelDetails] = useState(null);
+  const [selectedUserDetails, setSelectedUserDetails] = useState(null);
+  const [modelLoading, setModelLoading] = useState(false);
 
+  const fetchModelDetails = async (modelId, category) => {
+    try {
+      setModelLoading(true);
+      // Determine endpoint based on category
+      // NOTE: The backend handles searching both local and foreign collections via /models/:id
+      // We don't need to specify the category in the URL path
+
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/models/${modelId}`
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        setSelectedModelDetails(data);
+      } else {
+        console.error("Failed to fetch model details");
+        alert("Failed to fetch model details");
+      }
+    } catch (error) {
+      console.error("Error fetching model details:", error);
+    } finally {
+      setModelLoading(false);
+    }
+  };
+
+  const handleModelClick = (booking) => {
+    fetchModelDetails(booking.modelId, booking.modelCategory);
+  };
+
+  const handleUserClick = (user) => {
+    if (user) {
+      setSelectedUserDetails(user);
+    }
+  };
+
+  // State
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -154,45 +194,6 @@ const AdminBookings = () => {
       </div>
     );
   }
-
-  // Fetch model details when clicking model name
-  const [selectedModelDetails, setSelectedModelDetails] = useState(null);
-  const [selectedUserDetails, setSelectedUserDetails] = useState(null);
-  const [modelLoading, setModelLoading] = useState(false);
-
-  const fetchModelDetails = async (modelId, category) => {
-    try {
-      setModelLoading(true);
-      // Determine endpoint based on category
-      const endpoint =
-        category?.toLowerCase() === "foreign" ? "foreign" : "local";
-
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/models/${endpoint}/${modelId}`
-      );
-      if (response.ok) {
-        const data = await response.json();
-        setSelectedModelDetails(data);
-      } else {
-        console.error("Failed to fetch model details");
-        alert("Failed to fetch model details");
-      }
-    } catch (error) {
-      console.error("Error fetching model details:", error);
-    } finally {
-      setModelLoading(false);
-    }
-  };
-
-  const handleModelClick = (booking) => {
-    fetchModelDetails(booking.modelId, booking.modelCategory);
-  };
-
-  const handleUserClick = (user) => {
-    if (user) {
-      setSelectedUserDetails(user);
-    }
-  };
 
   return (
     <div className="min-h-screen bg-black p-6 md:p-8 animate-fade-in">
@@ -497,35 +498,11 @@ const AdminBookings = () => {
                   </span>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-4 text-center">
                   <div>
-                    <p className="text-gray-400 text-sm">Height</p>
+                    <p className="text-gray-400 text-sm">Category</p>
                     <p className="text-white">
-                      {selectedModelDetails.height || "N/A"}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-gray-400 text-sm">Bust</p>
-                    <p className="text-white">
-                      {selectedModelDetails.bust || "N/A"}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-gray-400 text-sm">Waist</p>
-                    <p className="text-white">
-                      {selectedModelDetails.waist || "N/A"}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-gray-400 text-sm">Hips</p>
-                    <p className="text-white">
-                      {selectedModelDetails.hips || "N/A"}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-gray-400 text-sm">Shoe Size</p>
-                    <p className="text-white">
-                      {selectedModelDetails.shoeSize || "N/A"}
+                      {selectedModelDetails.category || "N/A"}
                     </p>
                   </div>
                   <div>
@@ -543,31 +520,6 @@ const AdminBookings = () => {
                     </p>
                   </div>
                 </div>
-
-                {selectedModelDetails.galleryImages &&
-                  selectedModelDetails.galleryImages.length > 0 && (
-                    <div className="mt-6">
-                      <p className="text-gray-400 text-sm mb-2">
-                        Gallery Preview
-                      </p>
-                      <div className="flex gap-2 overflow-x-auto pb-2">
-                        {selectedModelDetails.galleryImages
-                          .slice(0, 4)
-                          .map((img, idx) => (
-                            <div
-                              key={idx}
-                              className="w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden"
-                            >
-                              <img
-                                src={img}
-                                alt={`Gallery ${idx}`}
-                                className="w-full h-full object-cover"
-                              />
-                            </div>
-                          ))}
-                      </div>
-                    </div>
-                  )}
               </>
             )}
           </div>

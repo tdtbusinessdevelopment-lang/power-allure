@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 
 const ErrorPage = () => {
   const [visibleSections, setVisibleSections] = useState(new Set());
 
   useEffect(() => {
     const timer1 = setTimeout(() => {
-      setVisibleSections(new Set(['content']));
+      setVisibleSections(new Set(["content"]));
     }, 100);
 
     return () => {
@@ -18,7 +18,7 @@ const ErrorPage = () => {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen w-full bg-black overflow-hidden">
+    <div className="flex justify-center items-center h-screen w-full bg-gradient-to-br from-black via-gray-900 to-black overflow-hidden">
       <div
         className={`flex flex-col items-center transition-all duration-1000 ${
           visibleSections.has("content")
@@ -32,15 +32,17 @@ const ErrorPage = () => {
           <div className="absolute inset-0 flex justify-center items-center">
             <div className="w-40 h-40 border-4 border-[#D8AF7F] rounded-full animate-spin-slow opacity-30"></div>
           </div>
-          
+
           {/* Middle pulsing ring */}
           <div className="absolute inset-0 flex justify-center items-center">
             <div className="w-32 h-32 border-4 border-[#D8AF7F] rounded-full animate-pulse-ring"></div>
           </div>
-          
+
           {/* Center content */}
           <div className="relative w-40 h-40 flex flex-col justify-center items-center">
-            <div className="text-[#D8AF7F] text-7xl font-bold animate-glitch">404</div>
+            <div className="text-[#D8AF7F] text-7xl font-bold animate-glitch">
+              404
+            </div>
             <div className="w-16 h-1 bg-[#D8AF7F] mt-2 animate-expand-contract"></div>
           </div>
         </div>
@@ -62,7 +64,7 @@ const ErrorPage = () => {
             Go Back
           </button>
           <button
-            onClick={() => window.location.href = '/'}
+            onClick={() => (window.location.href = "/")}
             className="px-8 py-3 rounded-full border-2 border-[#D8AF7F] text-[#D8AF7F] font-semibold transition-all hover:bg-[#D8AF7F] hover:text-black hover:scale-105 active:scale-95"
           >
             Home
@@ -82,12 +84,17 @@ const ErrorPage = () => {
 
       <style jsx>{`
         @keyframes spin-slow {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
+          from {
+            transform: rotate(0deg);
+          }
+          to {
+            transform: rotate(360deg);
+          }
         }
 
         @keyframes pulse-ring {
-          0%, 100% {
+          0%,
+          100% {
             transform: scale(1);
             opacity: 0.5;
           }
@@ -98,7 +105,9 @@ const ErrorPage = () => {
         }
 
         @keyframes glitch {
-          0%, 90%, 100% {
+          0%,
+          90%,
+          100% {
             transform: translateX(0);
             text-shadow: 0 0 10px rgba(216, 175, 127, 0.5);
           }
@@ -116,7 +125,8 @@ const ErrorPage = () => {
         }
 
         @keyframes expand-contract {
-          0%, 100% {
+          0%,
+          100% {
             width: 4rem;
             opacity: 1;
           }
@@ -186,7 +196,7 @@ const ErrorPage = () => {
           position: absolute;
           width: 4px;
           height: 4px;
-          background: #D8AF7F;
+          background: #d8af7f;
           border-radius: 50%;
           opacity: 0;
         }

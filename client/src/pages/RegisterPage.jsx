@@ -147,10 +147,10 @@ const RegisterPage = () => {
         }`}
         style={{ clipPath: "polygon(0 0, 100% 0, 60% 100%, 0 100%)" }}
       >
-        <h1 className="text-[#D8AF7F] text-4xl md:text-5xl font-bold mb-4">
-          Power Allure
+        <h1 className="font-serif text-5xl md:text-6xl font-bold mb-4 bg-gradient-to-br from-gold-light to-gold bg-clip-text text-transparent">
+          POWER ALLURE
         </h1>
-        <p className="text-[#D8AF7F] text-base md:text-lg">
+        <p className="text-gold text-lg md:text-xl font-light tracking-wide">
           Feel the power. Own the allure.
         </p>
       </div>
@@ -165,7 +165,7 @@ const RegisterPage = () => {
               : "opacity-0 translate-x-10"
           }`}
         >
-          <h2 className="text-black text-3xl md:text-4xl font-bold mb-6 md:mb-8">
+          <h2 className="font-serif text-4xl md:text-5xl font-bold mb-6 md:mb-8 text-black">
             Register
           </h2>
           <div className="w-full max-w-lg flex flex-col gap-4">
@@ -249,8 +249,8 @@ const RegisterPage = () => {
           <button
             onClick={handleRegister}
             disabled={isLoading}
-            className={`mt-6 md:mt-8 px-8 py-3 rounded-full bg-[#c5c4c4] text-black font-semibold transition-colors ${
-              isLoading ? "opacity-50 cursor-not-allowed" : "hover:bg-[#b0afaf]"
+            className={`mt-6 md:mt-8 px-8 py-3 rounded-full bg-black text-gold font-semibold transition-all hover:scale-105 ${
+              isLoading ? "opacity-50 cursor-not-allowed" : "hover:shadow-gold"
             }`}
           >
             {isLoading ? "Registering..." : "Register"}

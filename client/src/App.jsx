@@ -4,7 +4,7 @@ import AboutPage from "./pages/AboutPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import MainPage from "./pages/MainPage";
-import DetailPage from "./components/DetailPage";
+import DetailPage from "./pages/DetailPage";
 import AdminUpload from "./pages/AdminUpload"; // 1. Import your new component
 import BookingPage from "./pages/BookingPage";
 import FavoritesPage from "./pages/FavoritesPage";

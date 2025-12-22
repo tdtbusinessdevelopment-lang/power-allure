@@ -2,33 +2,31 @@ import React from "react";
 
 const LoadingSpinner = ({ message = "Loading...", size = "default" }) => {
   const sizeClasses = {
-    small: "w-8 h-8",
-    default: "w-16 h-16",
-    large: "w-24 h-24",
+    small: "w-2 h-2",
+    default: "w-3 h-3",
+    large: "w-4 h-4",
   };
 
   return (
-    <div className="flex flex-col items-center justify-center gap-4">
+    <div className="flex flex-col items-center justify-center gap-6">
       {/* Spinner */}
-      <div className="relative">
-        {/* Outer ring */}
+      <div className="flex items-center justify-center space-x-2">
         <div
-          className={`${sizeClasses[size]} rounded-full border-4 border-[#dcb887]/20`}
+          className={`${sizeClasses[size]} bg-gold rounded-full animate-elegant-spinner`}
+          style={{ animationDelay: "-0.32s" }}
         ></div>
-
-        {/* Spinning ring */}
         <div
-          className={`${sizeClasses[size]} rounded-full border-4 border-transparent border-t-[#dcb887] absolute top-0 left-0 animate-spin`}
-          style={{ animationDuration: "1s" }}
+          className={`${sizeClasses[size]} bg-gold rounded-full animate-elegant-spinner`}
+          style={{ animationDelay: "-0.16s" }}
         ></div>
-
-        {/* Inner pulsing dot */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 bg-[#dcb887] rounded-full animate-pulse"></div>
+        <div
+          className={`${sizeClasses[size]} bg-gold rounded-full animate-elegant-spinner`}
+        ></div>
       </div>
 
       {/* Loading text */}
       {message && (
-        <p className="text-[#dcb887] text-lg font-medium animate-pulse">
+        <p className="text-gold text-lg font-medium tracking-wider">
           {message}
         </p>
       )}
