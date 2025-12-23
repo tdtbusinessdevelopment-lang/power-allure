@@ -4,8 +4,7 @@ import AboutPage from "./pages/AboutPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import MainPage from "./pages/MainPage";
-import DetailPage from "./components/DetailPage";
-import AdminUpload from "./pages/AdminUpload"; // 1. Import your new component
+import DetailPage from "./components/DetailPage"; // 1. Import your new component
 import BookingPage from "./pages/BookingPage";
 import FavoritesPage from "./pages/FavoritesPage";
 import ProfilePage from "./pages/ProfilePage";
@@ -22,7 +21,6 @@ function App() {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
       
-        <Route path="/admin/upload" element={<AdminUpload />} />
 
       <Route element={<ProtectedRoute />}>
         <Route path="/main" element={<MainPage />} />
