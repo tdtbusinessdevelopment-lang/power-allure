@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import API_URL from "../config/api";
+import API_URL from "../../config/api";
 
 const Header = ({ activeTab, onTabChange }) => {
   const navigate = useNavigate();

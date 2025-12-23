@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Header from "../components/Header";
-import LoadingSpinner from "../components/LoadingSpinner";
-import API_URL from "../config/api";
+import Header from "../../components/layout/Header";
+import LoadingSpinner from "../../components/common/LoadingSpinner";
+import API_URL from "../../config/api";
 
 const FavoritesPage = () => {
   const navigate = useNavigate();

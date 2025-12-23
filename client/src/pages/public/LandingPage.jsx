@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import LandingHeader from "../components/LandingHeader";
-import heroVideo from "../assets/Landing.mp4";
+import LandingHeader from "../../components/layout/LandingHeader";
+import heroVideo from "../../assets/Landing.mp4";
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -81,8 +81,6 @@ const LandingPage = () => {
             {/* Hover Effect */}
             <div className="absolute inset-0 bg-white transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
           </button>
-
-          
         </div>
 
         {/* Decorative Elements */}

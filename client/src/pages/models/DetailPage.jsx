@@ -1,9 +1,9 @@
 import React from "react";
-import Header from "../components/Header";
-import LoadingSpinner from "../components/LoadingSpinner";
-import { useDetailPageLogic } from "../hooks/useDetailPageLogic";
-import { ModelGallery } from "../components/detail/ModelGallery";
-import { ModelDetails } from "../components/detail/ModelDetails";
+import Header from "../../components/layout/Header";
+import LoadingSpinner from "../../components/common/LoadingSpinner";
+import { useDetailPageLogic } from "../../hooks/useDetailPageLogic";
+import { ModelGallery } from "../../components/detail/ModelGallery";
+import { ModelDetails } from "../../components/detail/ModelDetails";
 
 const DetailPage = () => {
   const {

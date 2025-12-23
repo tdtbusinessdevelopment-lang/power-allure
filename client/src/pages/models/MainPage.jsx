@@ -1,9 +1,9 @@
 import React from "react";
-import LoadingSpinner from "../components/LoadingSpinner";
-import { useMainPageLogic } from "../hooks/useMainPageLogic";
-import { MainPageHeader } from "../components/main/MainPageHeader";
-import { ModelGrid } from "../components/main/ModelGrid";
-import { NoModelsFound } from "../components/main/NoModelsFound";
+import LoadingSpinner from "../../components/common/LoadingSpinner";
+import { useMainPageLogic } from "../../hooks/useMainPageLogic";
+import { MainPageHeader } from "../../components/main/MainPageHeader";
+import { ModelGrid } from "../../components/main/ModelGrid";
+import { NoModelsFound } from "../../components/main/NoModelsFound";
 
 const MainPage = () => {
   const {

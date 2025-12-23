@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import LandingHeader from "../components/LandingHeader";
-import heroVideo from "../assets/About.mp4";
-import ourModel from "../assets/ourmodel.jpg";
-import ourModel1 from "../assets/ourmodel1.jpg";
-import why from "../assets/why.jpg";
-import why1 from "../assets/why1.jpg";
-import why2 from "../assets/why2.jpg";
-import Footer from "../components/Footer";
+import LandingHeader from "../../components/layout/LandingHeader";
+import heroVideo from "../../assets/About.mp4";
+import ourModel from "../../assets/ourmodel.jpg";
+import ourModel1 from "../../assets/ourmodel1.jpg";
+import why from "../../assets/why.jpg";
+import why1 from "../../assets/why1.jpg";
+import why2 from "../../assets/why2.jpg";
+import Footer from "../../components/layout/Footer";
 
 const AboutPage = () => {
   const navigate = useNavigate();
