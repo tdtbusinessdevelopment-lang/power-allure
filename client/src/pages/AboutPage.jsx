@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import LandingHeader from "../components/LandingHeader";
 import heroVideo from "../assets/About.mp4";
 import Footer from "../components/Footer";
+
+import ourmodel from "../assets/ourmodel.jpg";
 import ourmodel1 from "../assets/ourmodel1.jpg";
 import why1 from "../assets/why1.jpg";
 import why2 from "../assets/why2.jpg";
@@ -159,7 +161,7 @@ const AboutPage = () => {
             </div>
             <div className="absolute bottom-0 left-0 w-[65%] h-[55%] z-20">
               <img
-                src={ourmodel1}
+                src={ourmodel}
                 alt="Model poolside"
                 className="w-full h-full object-cover rounded-2xl grayscale-[10%]"
               />
