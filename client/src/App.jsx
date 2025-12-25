@@ -29,7 +29,7 @@ function App() {
 
       <Route element={<ProtectedRoute />}>
         <Route path="/main" element={<MainPage />} />
-        <Route path="/model/:id" element={<DetailPage />} />
+                <Route path="/model/:name" element={<DetailPage />} />
         <Route path="/booking" element={<BookingPage />} />
         <Route path="/favorites" element={<FavoritesPage />} />
         <Route path="/profile" element={<ProfilePage />} />
