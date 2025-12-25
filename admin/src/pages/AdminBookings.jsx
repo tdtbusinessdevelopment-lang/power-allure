@@ -9,6 +9,11 @@ const AdminBookings = () => {
   const [error, setError] = useState("");
   const [selectedModel, setSelectedModel] = useState("All Models");
 
+  // Model and user details state
+  const [selectedModelDetails, setSelectedModelDetails] = useState(null);
+  const [selectedUserDetails, setSelectedUserDetails] = useState(null);
+  const [modelLoading, setModelLoading] = useState(false);
+
   // Fetch bookings from API
   useEffect(() => {
     fetchBookings();
@@ -135,6 +140,48 @@ const AdminBookings = () => {
     }
   };
 
+  // Fetch model details when clicking model name
+  const fetchModelDetails = async (modelId, category) => {
+    try {
+      setModelLoading(true);
+
+      // Use the simple /models/:id endpoint
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/models/${modelId}`
+      );
+      if (response.ok) {
+        const data = await response.json();
+        setSelectedModelDetails(data);
+      } else {
+        console.error("Failed to fetch model details");
+        alert("Failed to fetch model details");
+      }
+    } catch (error) {
+      console.error("Error fetching model details:", error);
+    } finally {
+      setModelLoading(false);
+    }
+  };
+
+  const handleModelClick = (booking) => {
+    console.log("Model clicked:", booking);
+    console.log("Model ID:", booking.modelId);
+    console.log("Model Category:", booking.modelCategory);
+
+    if (!booking.modelId) {
+      alert("Model ID is missing from booking data");
+      return;
+    }
+
+    fetchModelDetails(booking.modelId, booking.modelCategory);
+  };
+
+  const handleUserClick = (user) => {
+    if (user) {
+      setSelectedUserDetails(user);
+    }
+  };
+
   // Extract unique model names for filter
   const uniqueModels = [
     "All Models",
@@ -154,45 +201,6 @@ const AdminBookings = () => {
       </div>
     );
   }
-
-  // Fetch model details when clicking model name
-  const [selectedModelDetails, setSelectedModelDetails] = useState(null);
-  const [selectedUserDetails, setSelectedUserDetails] = useState(null);
-  const [modelLoading, setModelLoading] = useState(false);
-
-  const fetchModelDetails = async (modelId, category) => {
-    try {
-      setModelLoading(true);
-      // Determine endpoint based on category
-      const endpoint =
-        category?.toLowerCase() === "foreign" ? "foreign" : "local";
-
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/models/${endpoint}/${modelId}`
-      );
-      if (response.ok) {
-        const data = await response.json();
-        setSelectedModelDetails(data);
-      } else {
-        console.error("Failed to fetch model details");
-        alert("Failed to fetch model details");
-      }
-    } catch (error) {
-      console.error("Error fetching model details:", error);
-    } finally {
-      setModelLoading(false);
-    }
-  };
-
-  const handleModelClick = (booking) => {
-    fetchModelDetails(booking.modelId, booking.modelCategory);
-  };
-
-  const handleUserClick = (user) => {
-    if (user) {
-      setSelectedUserDetails(user);
-    }
-  };
 
   return (
     <div className="min-h-screen bg-black p-6 md:p-8 animate-fade-in">
@@ -477,7 +485,7 @@ const AdminBookings = () => {
                 </button>
                 <div className="flex flex-col items-center mb-6">
                   <div
-                    className="w-32 h-32 rounded-full overflow-hidden mb-4 border-2"
+                    className="w-40 h-40 rounded-full overflow-hidden mb-4 border-2"
                     style={{ borderColor: themeColor }}
                   >
                     <img
@@ -487,84 +495,49 @@ const AdminBookings = () => {
                     />
                   </div>
                   <h3
-                    className="text-2xl font-bold"
+                    className="text-2xl font-bold mb-2"
                     style={{ color: themeColor }}
                   >
                     {selectedModelDetails.name}
                   </h3>
-                  <span className="text-gray-400 text-sm uppercase tracking-widest mt-1">
-                    {selectedModelDetails.location || "Model"}
+                  <span className="text-gray-400 text-sm uppercase tracking-widest mb-2">
+                    {selectedModelDetails.category === "foreign"
+                      ? "FOREIGN"
+                      : "LOCAL"}
                   </span>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <p className="text-gray-400 text-sm">Height</p>
-                    <p className="text-white">
-                      {selectedModelDetails.height || "N/A"}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-gray-400 text-sm">Bust</p>
-                    <p className="text-white">
-                      {selectedModelDetails.bust || "N/A"}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-gray-400 text-sm">Waist</p>
-                    <p className="text-white">
-                      {selectedModelDetails.waist || "N/A"}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-gray-400 text-sm">Hips</p>
-                    <p className="text-white">
-                      {selectedModelDetails.hips || "N/A"}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-gray-400 text-sm">Shoe Size</p>
-                    <p className="text-white">
-                      {selectedModelDetails.shoeSize || "N/A"}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-gray-400 text-sm">Availability</p>
-                    <p
-                      className={
-                        selectedModelDetails.available
-                          ? "text-green-500"
-                          : "text-red-500"
-                      }
-                    >
-                      {selectedModelDetails.available
-                        ? "Available"
-                        : "Unavailable"}
-                    </p>
-                  </div>
+                  <p
+                    className={`text-sm font-semibold ${
+                      selectedModelDetails.available
+                        ? "text-green-500"
+                        : "text-red-500"
+                    }`}
+                  >
+                    {selectedModelDetails.available
+                      ? "✓ Available"
+                      : "✗ Unavailable"}
+                  </p>
                 </div>
 
                 {selectedModelDetails.galleryImages &&
                   selectedModelDetails.galleryImages.length > 0 && (
                     <div className="mt-6">
-                      <p className="text-gray-400 text-sm mb-2">
-                        Gallery Preview
+                      <p className="text-gray-400 text-sm mb-3 text-center">
+                        Gallery
                       </p>
-                      <div className="flex gap-2 overflow-x-auto pb-2">
-                        {selectedModelDetails.galleryImages
-                          .slice(0, 4)
-                          .map((img, idx) => (
-                            <div
-                              key={idx}
-                              className="w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden"
-                            >
-                              <img
-                                src={img}
-                                alt={`Gallery ${idx}`}
-                                className="w-full h-full object-cover"
-                              />
-                            </div>
-                          ))}
+                      <div className="grid grid-cols-3 gap-3">
+                        {selectedModelDetails.galleryImages.map((img, idx) => (
+                          <div
+                            key={idx}
+                            className="aspect-square rounded-lg overflow-hidden border"
+                            style={{ borderColor: themeColor }}
+                          >
+                            <img
+                              src={img}
+                              alt={`Gallery ${idx + 1}`}
+                              className="w-full h-full object-cover hover:scale-110 transition-transform cursor-pointer"
+                            />
+                          </div>
+                        ))}
                       </div>
                     </div>
                   )}

@@ -20,11 +20,10 @@ function App() {
       <Route path="/about" element={<AboutPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
-      
 
       <Route element={<ProtectedRoute />}>
         <Route path="/main" element={<MainPage />} />
-        <Route path="/model/:id" element={<DetailPage />} />
+        <Route path="/model/:name" element={<DetailPage />} />
         <Route path="/booking" element={<BookingPage />} />
         <Route path="/favorites" element={<FavoritesPage />} />
         <Route path="/profile" element={<ProfilePage />} />

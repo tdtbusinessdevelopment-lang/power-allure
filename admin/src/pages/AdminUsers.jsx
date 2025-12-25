@@ -22,6 +22,10 @@ const AdminUsers = () => {
     age: "",
   });
 
+  // Model details state for favorites
+  const [selectedModelDetails, setSelectedModelDetails] = useState(null);
+  const [modelLoading, setModelLoading] = useState(false);
+
   // Fetch all users
   const fetchUsers = async () => {
     setIsLoading(true);
@@ -143,25 +147,13 @@ const AdminUsers = () => {
     return date.toLocaleDateString();
   };
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
-        <p className="text-white text-xl">Loading users...</p>
-      </div>
-    );
-  }
-
   // Fetch model details for favorites
-  const [selectedModelDetails, setSelectedModelDetails] = useState(null);
-  const [modelLoading, setModelLoading] = useState(false);
-
   const fetchModelDetails = async (modelId, category) => {
     try {
       setModelLoading(true);
-      const endpoint =
-        category?.toLowerCase() === "foreign" ? "foreign" : "local";
 
-      const response = await fetch(`${API_URL}/models/${endpoint}/${modelId}`);
+      // Use the simple /models/:id endpoint
+      const response = await fetch(`${API_URL}/models/${modelId}`);
       if (response.ok) {
         const data = await response.json();
         setSelectedModelDetails(data);
@@ -174,6 +166,14 @@ const AdminUsers = () => {
       setModelLoading(false);
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <p className="text-white text-xl">Loading users...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-black p-6 md:p-8 animate-fade-in">

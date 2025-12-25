@@ -5,11 +5,14 @@ import LoadingSpinner from "./LoadingSpinner";
 import API_URL from "../config/api";
 
 const DetailPage = () => {
-  const { id } = useParams();
+  const { name } = useParams(); // Get name from URL (for display only)
   const location = useLocation();
   const navigate = useNavigate();
   const themeColor = "#D8AF7F";
   const statBgColor = "bg-[#4F4949]";
+
+  // Get the actual model ID from location.state (passed during navigation)
+  const modelId = location.state?.modelId;
 
   // State for active tab in header
   const [activeTab, setActiveTab] = useState("LOCAL");
@@ -65,11 +68,11 @@ const DetailPage = () => {
     }
   }, [location.state]);
 
-  // Fetch model data from API
+  // Fetch model data from API using the modelId from state
   useEffect(() => {
     const fetchModelData = async () => {
       try {
-        const response = await fetch(`${API_URL}/models/${id}`);
+        const response = await fetch(`${API_URL}/models/${modelId}`);
 
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -94,14 +97,16 @@ const DetailPage = () => {
       }
     };
 
-    // Only fetch if id exists and is not "undefined"
-    if (id && id !== "undefined") {
+    // Only fetch if modelId exists
+    if (modelId && modelId !== "undefined") {
       fetchModelData();
     } else {
+      // If no modelId in state, redirect to error page
       setLoading(false);
       setModelData(null);
+      navigate("/error", { replace: true });
     }
-  }, [id]);
+  }, [modelId, navigate]);
 
   // Gallery images: use galleryImages array if available, otherwise use imageUrl
   const galleryImages =
