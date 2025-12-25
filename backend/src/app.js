@@ -35,9 +35,15 @@ const corsOptions = {
     // Combine all allowed origins
     const allowedOrigins = [...localOrigins, ...productionOrigins];
     
+    // Debug logging
+    console.log('CORS Request from origin:', origin);
+    console.log('Allowed origins:', allowedOrigins);
+    console.log('FRONTEND_URLS env:', process.env.FRONTEND_URLS);
+    
     if (allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
+      console.error('CORS BLOCKED - Origin not allowed:', origin);
       callback(new Error('Not allowed by CORS'));
     }
   },
