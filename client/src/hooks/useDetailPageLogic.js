@@ -3,9 +3,12 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import API_URL from "../config/api";
 
 export const useDetailPageLogic = () => {
-  const { id } = useParams();
+  const { name } = useParams(); // Get name from URL (for display only)
   const location = useLocation();
   const navigate = useNavigate();
+
+  // Get the actual model ID from location.state (passed during navigation)
+  const modelId = location.state?.modelId;
 
   const [activeTab, setActiveTab] = useState("LOCAL");
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -29,7 +32,7 @@ export const useDetailPageLogic = () => {
     const fetchModelData = async () => {
       setLoading(true);
       try {
-        const response = await fetch(`${API_URL}/models/${id}`);
+        const response = await fetch(`${API_URL}/models/${modelId}`);
         if (!response.ok)
           throw new Error(`HTTP error! status: ${response.status}`);
         const data = await response.json();
@@ -48,13 +51,13 @@ export const useDetailPageLogic = () => {
       }
     };
 
-    if (id && id !== "undefined") {
+    if (modelId && modelId !== "undefined") {
       fetchModelData();
     } else {
       setLoading(false);
       navigate("/error", { replace: true });
     }
-  }, [id, navigate]);
+  }, [modelId, navigate]);
 
   const galleryImages =
     modelData?.galleryImages?.length > 0

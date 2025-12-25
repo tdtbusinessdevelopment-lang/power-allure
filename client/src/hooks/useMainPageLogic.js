@@ -73,8 +73,15 @@ export const useMainPageLogic = () => {
   }, [activeTab]);
 
   const handleCardClick = (model) => {
-    navigate(`/model/${model._id}`, {
-      state: { selectedImage: model.imageUrl, category: activeTab },
+    // Convert model name to URL-friendly slug (lowercase, replace spaces with hyphens)
+    const modelSlug = model.name.toLowerCase().replace(/\s+/g, '-');
+    
+    navigate(`/model/${modelSlug}`, {
+      state: { 
+        selectedImage: model.imageUrl, 
+        category: activeTab,
+        modelId: model._id // Pass the actual ID through state (hidden from URL)
+      },
     });
   };
 
