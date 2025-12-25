@@ -20,14 +20,22 @@ const corsOptions = {
     // Allow requests with no origin (mobile apps, curl, etc.)
     if (!origin) return callback(null, true);
     
-    const allowedOrigins = [
+    // Local development origins
+    const localOrigins = [
       'http://localhost:5173',
       'http://localhost:5174',
       'http://localhost:3000',
-      process.env.FRONTEND_URL, // Production frontend URL
-    ].filter(Boolean); // Remove undefined values
+    ];
     
-    if (allowedOrigins.indexOf(origin) !== -1) {
+    // Parse production frontend URLs from environment variable (comma-separated)
+    const productionOrigins = process.env.FRONTEND_URLS 
+      ? process.env.FRONTEND_URLS.split(',').map(url => url.trim()).filter(Boolean)
+      : [];
+    
+    // Combine all allowed origins
+    const allowedOrigins = [...localOrigins, ...productionOrigins];
+    
+    if (allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
