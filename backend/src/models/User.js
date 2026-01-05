@@ -69,7 +69,19 @@ const userSchema = new mongoose.Schema({
       type: Date,
       default: Date.now
     }
-  }]
+  }],
+  activeSessionToken: {
+    type: String,
+    default: null,
+  },
+  sessionCreatedAt: {
+    type: Date,
+    default: null,
+  },
+  lastActivityAt: {
+    type: Date,
+    default: null,
+  },
 });
 
 const User = mongoose.model("User", userSchema, "Users");

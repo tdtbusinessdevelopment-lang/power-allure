@@ -32,6 +32,18 @@ const adminUserSchema = new mongoose.Schema({
     type: Date,
     default: null,
   },
+  activeSessionToken: {
+    type: String,
+    default: null,
+  },
+  sessionCreatedAt: {
+    type: Date,
+    default: null,
+  },
+  lastActivityAt: {
+    type: Date,
+    default: null,
+  },
 });
 
 const AdminUser = mongoose.model("AdminUser", adminUserSchema, "AdminUsers");

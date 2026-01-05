@@ -56,6 +56,16 @@ export const login = async (req, res) => {
       expiresIn: "24h",
     });
 
+    // Hash the token for storage (security best practice)
+    const salt = await bcrypt.genSalt(10);
+    const hashedToken = await bcrypt.hash(token, salt);
+
+    // Store the hashed token and session info (this invalidates any previous session)
+    user.activeSessionToken = hashedToken;
+    user.sessionCreatedAt = new Date();
+    user.lastActivityAt = new Date();
+    await user.save();
+
     // Successful login
     res.status(200).json({
       success: true,
@@ -199,6 +209,76 @@ export const register = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Server error during registration",
+    });
+  }
+};
+
+export const validateSession = async (req, res) => {
+  try {
+    const token = req.header("Authorization")?.replace("Bearer ", "");
+
+    if (!token) {
+      return res.status(401).json({
+        success: false,
+        message: "No token provided",
+        sessionInvalidated: true,
+      });
+    }
+
+    // Verify JWT signature
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    // Fetch user
+    const user = await User.findById(decoded.id);
+
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: "User not found",
+        sessionInvalidated: true,
+      });
+    }
+
+    // Check if there's an active session token stored
+    if (!user.activeSessionToken) {
+      return res.status(401).json({
+        success: false,
+        message: "No active session",
+        sessionInvalidated: true,
+      });
+    }
+
+    // Verify the token matches the stored session
+    const isValidSession = await bcrypt.compare(token, user.activeSessionToken);
+
+    if (!isValidSession) {
+      return res.status(401).json({
+        success: false,
+        message: "Session has been invalidated by another login",
+        sessionInvalidated: true,
+      });
+    }
+
+    // Session is valid
+    res.status(200).json({
+      success: true,
+      message: "Session is valid",
+      sessionInvalidated: false,
+    });
+  } catch (error) {
+    console.error("Session validation error:", error);
+
+    if (error.name === "JsonWebTokenError" || error.name === "TokenExpiredError") {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid or expired token",
+        sessionInvalidated: true,
+      });
+    }
+
+    res.status(500).json({
+      success: false,
+      message: "Server error during session validation",
     });
   }
 };
