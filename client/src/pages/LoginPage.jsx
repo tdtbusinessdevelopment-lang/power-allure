@@ -10,6 +10,12 @@ const LoginPage = () => {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
+  // Clear any stale tokens when login page loads
+  useEffect(() => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+  }, []);
+
   const handleLogin = async () => {
     // Clear previous errors
     setError("");
