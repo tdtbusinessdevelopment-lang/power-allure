@@ -53,11 +53,11 @@ const userSchema = new mongoose.Schema({
     },
     username: {
       type: String,
-      required: true
+      required: false  // Changed to false to support existing data
     },
     password: {
       type: String,
-      required: true
+      required: false  // Changed to false to support existing data
     },
     imageUrl: {
       type: String
